@@ -1,0 +1,18 @@
+# frozen_string_literal: true
+
+task :seed do
+  sh 'ruby database/seeder.rb'
+end
+
+task :dev do
+  # sh 'bundle exec rerun --pattern "**/*.{erb,js,css}" --force-polling ruby ./routes/app.rb'
+  sh 'RACK_ENV=development bundle exec rerun --ignore "/**/*.{erb,js,css}" "rackup --host 0.0.0.0 ./config/config.ru"'
+end
+
+task :run do
+  # todo
+end
+
+task :test do
+  # todo
+end
