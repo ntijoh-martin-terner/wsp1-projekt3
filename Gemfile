@@ -3,9 +3,9 @@
 source 'https://rubygems.org'
 
 gem 'bcrypt'
-gem 'puma'
 gem 'rack'
 gem 'rackup'
+gem 'rake'
 gem 'rerun'
 gem 'sinatra'
 gem 'sqlite3'
@@ -25,3 +25,7 @@ gem 'yui-compressor', '~> 0.12.0'
 gem 'terser', '~> 1.2'
 
 gem 'sassc', '~> 2.4'
+
+gem 'tailwindcss-ruby', '~> 3.4'
+
+gem 'puma', '~> 6.5'

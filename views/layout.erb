@@ -1,13 +1,17 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <link rel="stylesheet" href="assets/base.css">
-    <script src="assets/tailwind.js"></script>
+    <link rel="stylesheet" href="assets/application.css">
+    <script src="assets/flowbite.js"></script>
+    <%# <script defer src="assets/application.css"></script> %>
+    <%# <script defer src="/js/tailwind.min.js"></script> %>
 </head>
 <body>
+  <%# <%= Profile({username: 'oudend', mail: 'abc', user_profile_id: nil}, true) %>
+  <%=Navbar(0, nil)%>
   <%= yield %>
 </body>
 </html>

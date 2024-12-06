@@ -16,13 +16,13 @@ class App < Sinatra::Base
     set :asset_bundler, AssetBundler.new
 
     # JavaScript group
-    settings.asset_bundler.add_js(:tailwind, paths: [
-                                    [File.join(APP_ROOT, 'assets/js/tailwind.min.js'), false]
+    settings.asset_bundler.add_js(:flowbite, paths: [
+                                    [File.join(APP_ROOT, 'node_modules/flowbite/dist/flowbite.min.js'), false]
                                   ])
 
     # CSS group
-    settings.asset_bundler.add_css(:base, paths: [
-                                     [File.join(APP_ROOT, 'assets/style/main.css'), true]
+    settings.asset_bundler.add_css(:application, paths: [
+                                     [File.join(APP_ROOT, 'assets/builds/application.css'), false]
                                    ])
   end
 
@@ -84,6 +84,8 @@ class App < Sinatra::Base
 
   # Helper for dynamically loading components
   helpers do
+    @helpers = []
+
     # Dynamically load and define methods for components
     Dir.glob(File.join(settings.components, '/*/*.rb')).each do |component|
       # Require the component file
@@ -93,7 +95,16 @@ class App < Sinatra::Base
       class_name = File.basename(component, '.rb').split('_').map(&:capitalize).join
 
       # Dynamically define a helper method for the component
-      define_method(class_name.to_sym) do |*args|
+      @helpers << define_method(class_name.to_sym) do |*args|
+        # Instantiate the component with provided arguments
+        component_class = Object.const_get(class_name)
+        component_instance = component_class.new(*args)
+
+        # Render the component's ERB template
+        component_instance.render
+      end
+
+      BaseComponent.define_method(class_name.to_sym) do |*args|
         # Instantiate the component with provided arguments
         component_class = Object.const_get(class_name)
         component_instance = component_class.new(*args)
@@ -102,5 +113,14 @@ class App < Sinatra::Base
         component_instance.render
       end
     end
+
+    # BaseComponent.include_helpers!(@helpers, self)
   end
+
+  # Defer including helpers until the app instance is initialized
+  # configure do
+  #   BaseComponent.include_helpers!(@helpers, self)
+  # end
+
+  # BaseComponent.include_helpers!(@helpers, self)
 end

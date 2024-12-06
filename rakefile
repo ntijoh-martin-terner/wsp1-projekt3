@@ -6,7 +6,8 @@ end
 
 task :dev do
   # sh 'bundle exec rerun --pattern "**/*.{erb,js,css}" --force-polling ruby ./routes/app.rb'
-  sh 'RACK_ENV=development bundle exec rerun --ignore "/**/*.{erb,js,css}" "rackup --host 0.0.0.0 ./config/config.ru"'
+  sh 'bundle'
+  sh 'RACK_ENV=development bundle exec rerun --force-polling --signal SIGUSR2 "rackup --host 0.0.0.0 ./config/config.ru & rake tailwind:build"'
 end
 
 task :run do
@@ -16,3 +17,14 @@ end
 task :test do
   # todo
 end
+
+namespace :tailwind do
+  task :build do
+    sh 'bundle exec tailwindcss -i assets/stylesheets/application.tailwind.css -o assets/builds/application.css -m'
+  end
+  task :watch do
+    sh 'bundle exec tailwindcss -i assets/stylesheets/application.tailwind.css -o assets/builds/application.css -m -w'
+  end
+end
+
+# TODO: CREATE PROFILE PICTURE COMPONENT AND Also navbar component after

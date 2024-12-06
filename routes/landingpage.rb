@@ -4,8 +4,10 @@
 
 require APP_PATH
 
-class Home < App
+# %r{/(home)?}
+
+class Landingpage < App
   get '/' do
-    erb :home
+    erb :landingPage
   end
 end

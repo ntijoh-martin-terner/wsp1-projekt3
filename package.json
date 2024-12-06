@@ -1,5 +1,8 @@
 {
   "devDependencies": {
     "cypress": "^13.16.0"
+  },
+  "dependencies": {
+    "flowbite": "^2.5.2"
   }
 }

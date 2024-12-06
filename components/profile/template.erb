@@ -1,0 +1,37 @@
+<button type="button" class="flex text-sm bg-gray-800 rounded-full md:me-0 focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600" id="user-menu-button" aria-expanded="false" data-dropdown-toggle="user-dropdown" data-dropdown-placement="bottom">
+  <span class="sr-only">Open user menu</span>
+  <%if !@profile_picture_src.nil?%>
+  <img class="w-8 h-8 rounded-full" src="<%=@profile_picture_src%>" alt="user photo">
+  <%else%>
+    <svg class="w-8 h-8 rounded-full" xmlns="http://www.w3.org/2000/svg" viewBox="312.809 0 401 401" alt="user photo">
+      <g transform="matrix(1.223 0 0 1.223 -467.5 -843.44)">
+        <rect x="601.45" y="653.07" width="401" height="401" fill="#E4E6E7"/>
+        <path d="m802.38 908.08c-84.515 0-153.52 48.185-157.38 108.62h314.79c-3.87-60.44-72.9-108.62-157.41-108.62z" fill="#AEB4B7"/>
+        <path d="m881.37 818.86c0 46.746-35.106 84.641-78.41 84.641s-78.41-37.895-78.41-84.641 35.106-84.641 78.41-84.641c43.31 0 78.41 37.9 78.41 84.64z" fill="#AEB4B7"/>
+      </g>
+    </svg>
+  <%end%>
+</button>
+<!-- Dropdown menu -->
+<div class="z-50 hidden my-4 text-base list-none bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700 dark:divide-gray-600" id="user-dropdown">
+  <div class="px-4 py-3">
+    <span class="block text-sm text-gray-900 dark:text-white"><%=@username%></span>
+    <span class="block text-sm  text-gray-500 truncate dark:text-gray-400"><%=@mail%></span>
+  </div>
+  <%if @dropdown%>
+    <ul class="py-2" aria-labelledby="user-menu-button">
+      <li>
+        <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Dashboard</a>
+      </li>
+      <li>
+        <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Settings</a>
+      </li>
+      <li>
+        <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Earnings</a>
+      </li>
+      <li>
+        <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Sign out</a>
+      </li>
+    </ul>
+  <%end%>
+</div>

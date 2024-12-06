@@ -7,4 +7,4 @@ User.drop
 User.create
 p User.primary_key_clause
 
-User.insert(username: 'john')
+User.insert(username: 'john', password_hash: User.hash_password('secretPassword'), email: 'john@gmail.com')
