@@ -6,7 +6,7 @@ require APP_PATH
 
 # %r{/(home)?}
 
-class Landingpage < App
+class Base < App
   get '/' do
     erb :landingPage
   end

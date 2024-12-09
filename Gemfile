@@ -29,3 +29,5 @@ gem 'sassc', '~> 2.4'
 gem 'tailwindcss-ruby', '~> 3.4'
 
 gem 'puma', '~> 6.5'
+
+gem "dotenv", "~> 3.1"

@@ -6,6 +6,7 @@ require 'better_errors'
 require 'rdiscount'
 require_relative '../lib/asset_bundler'
 require 'erb'
+require 'dotenv/load'
 
 class App < Sinatra::Base
   configure do
@@ -14,6 +15,8 @@ class App < Sinatra::Base
     set :components, COMPONENTS_PATH
     set :public_folder, PUBLIC_PATH
     set :asset_bundler, AssetBundler.new
+    enable :sessions
+    set :session_secret, ENV['SESSION_SECRET'] # Change this to a secure secret
 
     # JavaScript group
     settings.asset_bundler.add_js(:flowbite, paths: [

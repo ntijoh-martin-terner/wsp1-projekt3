@@ -11,6 +11,10 @@ class User < BaseModel
     BCrypt::Password.new(password_hash) == password
   end
 
+  def self.find_by_username(username)
+    db.execute("SELECT * FROM #{table_name} WHERE username = ?", [username]).first
+  end
+
   # Insert data into the table with email validation
   def self.insert(data)
     validate_email!(data[:email]) if data[:email]
