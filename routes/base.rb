@@ -10,4 +10,10 @@ class Base < App
   get '/' do
     erb :landingPage
   end
+  get '/about' do
+    erb :about
+  end
+  get '/ads' do
+    erb :ads
+  end
 end

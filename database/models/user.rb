@@ -15,6 +15,10 @@ class User < BaseModel
     db.execute("SELECT * FROM #{table_name} WHERE username = ?", [username]).first
   end
 
+  def self.find_by_id(id)
+    db.execute("SELECT * FROM #{table_name} WHERE id = ?", [id]).first
+  end
+
   # Insert data into the table with email validation
   def self.insert(data)
     validate_email!(data[:email]) if data[:email]

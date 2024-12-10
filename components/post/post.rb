@@ -2,8 +2,8 @@
 
 require BASE_COMPONENT_PATH
 
-class Navbar < BaseComponent
-  def initialize()
+class Post < BaseComponent
+  def initialize
     super()
   end
 end

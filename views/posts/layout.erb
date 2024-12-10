@@ -8,7 +8,7 @@
     <title><%=PROJECT_NAME%> Posts</title>
 </head>
 <body>
-  <%=Navbar(0, nil)%>
+  <%=Navbar(0, @user, { 'Home' => '/posts/home', 'Popular' => '/posts/popular', 'Latest' => '/posts/latest'})%>
   <%= yield %>
   <%=Footer()%>
 </body>

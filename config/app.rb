@@ -29,6 +29,11 @@ class App < Sinatra::Base
                                    ])
   end
 
+  before do
+    @logged_in = !session[:user_id].nil?
+    @user = User.find_by_id(session[:user_id]) if @logged_in
+  end
+
   # Serve JavaScript bundles dynamically
   get '/assets/:group.js' do |group|
     bundler = settings.asset_bundler
