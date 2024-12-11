@@ -1,6 +1,10 @@
 class BaseModel
   def self.table_name
-    @table_name ||= name.downcase
+    @table_name ||= name.gsub(/::/, '/')
+                        .gsub(/([A-Z]+)([A-Z][a-z])/, '\1_\2')
+                        .gsub(/([a-z\d])([A-Z])/, '\1_\2')
+                        .tr('-', '_')
+                        .downcase
   end
 
   # maybe make the database stuff be passed from another class so that every model doesn't create its own database
@@ -37,6 +41,8 @@ class BaseModel
       INSERT INTO #{table_name} (#{columns})
       VALUES (#{placeholders});
     SQL
+
+    db.last_insert_row_id
   end
 
   def self.create(data)

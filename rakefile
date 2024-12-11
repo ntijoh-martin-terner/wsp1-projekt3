@@ -18,6 +18,10 @@ task :test do
   # todo
 end
 
+task :kill do
+  sh 'killall ruby'
+end
+
 namespace :tailwind do
   task :build do
     sh 'bundle exec tailwindcss -i assets/stylesheets/application.tailwind.css -o assets/builds/application.css -m'
