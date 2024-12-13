@@ -10,9 +10,10 @@ class PostComponent < BaseComponent
     "#{text[0, length]}#{omission}"
   end
 
-  def initialize(post)
+  def initialize(post, preview = true)
     @post = post
     @comment_count = Comment.comment_count(post['id'])
+    @preview = preview
     super()
   end
 end

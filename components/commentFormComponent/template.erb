@@ -1,0 +1,49 @@
+<% form_id = "comment-form-#{@parent_id || 'root'}" %>
+
+<div class="mt-4">
+  <%# Toggle Button with Flowbite Icon %>
+  <% unless @start_visible %>
+    <button type="button" onclick="toggleForm('<%= form_id %>', this)"
+      class="flex items-center text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-500 focus:outline-none">
+      <!-- Flowbite Plus Icon -->
+      <svg class="w-6 h-6 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+      </svg>
+      <span>Add a Comment</span>
+    </button>
+  <% end %>
+
+  <%# Comment Form %>
+  <div id="<%= form_id %>" class="<%= 'hidden' unless @start_visible %> mt-4 p-4 border rounded-lg shadow-sm bg-white dark:bg-gray-800">
+    <form action="/post/<%= @post['id'] %>/comment" method="post" class="space-y-4">
+      <!-- Parent ID -->
+      <input type="hidden" name="parent_id" value="<%= @parent_id %>" id="parent_id" />
+
+      <!-- Comment Content -->
+      <div>
+        <label for="content-<%= form_id %>" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Your Comment</label>
+        <textarea name="content" id="content-<%= form_id %>" rows="2" required
+          class="mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200 dark:bg-gray-700 dark:text-gray-300 dark:focus:ring-blue-600"></textarea>
+      </div>
+
+      <!-- Submit Button -->
+      <button type="submit"
+        class="inline-flex items-center px-3 py-1.5 bg-blue-600 text-white font-medium text-sm rounded-md hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500">
+        Post Comment
+      </button>
+    </form>
+  </div>
+</div>
+
+<script>
+  function toggleForm(formId, button) {
+    const form = document.getElementById(formId);
+    form.classList.toggle('hidden');
+    const span = button.querySelector('span');
+    if (form.classList.contains('hidden')) {
+      span.textContent = 'Add a Comment';
+    } else {
+      span.textContent = 'Hide Comment Form';
+    }
+  }
+</script>

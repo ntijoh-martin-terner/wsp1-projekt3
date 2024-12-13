@@ -34,6 +34,8 @@ class Comment < BaseModel
       comment_id INTEGER PRIMARY KEY AUTOINCREMENT,
       post_id INTEGER NOT NULL REFERENCES post(id) ON DELETE CASCADE,
       user_id INTEGER NOT NULL REFERENCES user(id) ON DELETE CASCADE,
+      upvotes INTEGER DEFAULT 0,
+      downvotes INTEGER DEFAULT 0,
       comment_text TEXT NOT NULL,
       created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
       parent_comment_id INTEGER, -- Self-referencing foreign key

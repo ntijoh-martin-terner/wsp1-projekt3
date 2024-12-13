@@ -2,13 +2,22 @@ require BASE_MODEL_PATH
 require 'bcrypt'
 require 'uri'
 
-class Post < BaseModel
+class PostModel < BaseModel
   def self.random_posts(seed, offset, limit)
     db.execute(<<-SQL, [seed, limit, offset])
       SELECT *#{' '}
       FROM post
       ORDER BY ABS((id * 12345) + ?) -- Seeded pseudo-random order
       LIMIT ? OFFSET ?
+    SQL
+  end
+
+  def self.get_post_from_id(post_id)
+    db.execute(<<-SQL, [post_id]).first
+      SELECT *
+      FROM post
+      WHERE id = ?
+      LIMIT 1
     SQL
   end
 

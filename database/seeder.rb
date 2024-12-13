@@ -16,13 +16,13 @@ RolePermission.drop
 ChannelRole.drop
 Permission.drop
 Comment.drop
-Post.drop
+PostModel.drop
 Channel.drop
 User.drop
 
 # Create tables
 User.create
-Post.create
+PostModel.create
 Comment.create
 Channel.create
 Permission.create
@@ -60,7 +60,7 @@ ChannelMembership.insert(user_id: user2_id, channel_id: channel_id, channel_role
 ChannelMembership.insert(user_id: user3_id, channel_id: channel_id, channel_role_id: member_role_id) # Doe is Member
 
 # Seed posts
-Post.insert(
+PostModel.insert(
   user_id: user1_id,
   channel_id: channel_id,
   content: 'Hello, world! This is my first post.',
@@ -68,14 +68,14 @@ Post.insert(
   upvotes: 10,
   downvotes: 2
 )
-Post.insert(
+PostModel.insert(
   user_id: user1_id,
   channel_id: channel_id,
   content: 'This is another post with just text content.',
   upvotes: 5,
   downvotes: 0
 )
-post3_id = Post.insert(
+post3_id = PostModel.insert(
   user_id: user2_id,
   channel_id: channel_id,
   content: 'Moderator Jane’s post in the Ruby group!',

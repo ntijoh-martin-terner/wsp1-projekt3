@@ -18,7 +18,7 @@ class Home < App
   end
 
   get '/home' do
-    @posts = Post.random_posts(daily_seed, 0, 10)
+    @posts = PostModel.random_posts(daily_seed, 0, 10)
 
     p @posts
     p daily_seed
