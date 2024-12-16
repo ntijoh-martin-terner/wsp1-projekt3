@@ -2,6 +2,7 @@
 
 require_relative '../config/environment'
 require_relative './models/user'
+require_relative './models/vote'
 require_relative './models/post'
 require_relative './models/channel/channel'
 require_relative './models/channel/permission'
@@ -17,15 +18,17 @@ ChannelRole.drop
 Permission.drop
 Comment.drop
 PostModel.drop
+VoteModel.drop
 Channel.drop
+Channel.create
 User.drop
 
 # Create tables
 User.create
 PostModel.create
 Comment.create
-Channel.create
 Permission.create
+VoteModel.create
 ChannelRole.create
 RolePermission.create
 ChannelMembership.create
@@ -60,28 +63,30 @@ ChannelMembership.insert(user_id: user2_id, channel_id: channel_id, channel_role
 ChannelMembership.insert(user_id: user3_id, channel_id: channel_id, channel_role_id: member_role_id) # Doe is Member
 
 # Seed posts
-PostModel.insert(
+post1_id = PostModel.insert(
   user_id: user1_id,
   channel_id: channel_id,
   content: 'Hello, world! This is my first post.',
-  media_url: 'https://example.com/image.png',
-  upvotes: 10,
-  downvotes: 2
+  media_url: 'https://example.com/image.png'
 )
-PostModel.insert(
+post2_id = PostModel.insert(
   user_id: user1_id,
   channel_id: channel_id,
-  content: 'This is another post with just text content.',
-  upvotes: 5,
-  downvotes: 0
+  content: 'This is another post with just text content.'
 )
 post3_id = PostModel.insert(
   user_id: user2_id,
   channel_id: channel_id,
-  content: 'Moderator Jane’s post in the Ruby group!',
-  upvotes: 7,
-  downvotes: 1
+  content: 'Moderator Jane’s post in the Ruby group!'
 )
+
+(0..30).each do |i|
+  PostModel.insert(
+    user_id: user2_id,
+    channel_id: channel_id,
+    content: "Spam number ##{i}"
+  )
+end
 
 # Insert a comment for the first post
 comment1_id = Comment.insert(
@@ -100,7 +105,7 @@ comment2_id = Comment.insert(
 )
 
 # Insert a reply to the first comment (nested comment)
-Comment.insert(
+reply1_id = Comment.insert(
   user_id: user2_id,
   post_id: post3_id,
   comment_text: 'Replying to the first comment!',
@@ -108,11 +113,40 @@ Comment.insert(
 )
 
 # Insert a reply to the second comment (nested comment)
-Comment.insert(
+reply2_id = Comment.insert(
   user_id: user1_id,
   post_id: post3_id,
   comment_text: 'Replying to the second comment!',
   parent_comment_id: comment2_id
 )
 
-p Comment.get_comments(post3_id)
+# Seed votes for posts
+VoteModel.cast_vote(user_id: user1_id, post_id: post1_id, vote_type: 1) # John upvotes post 1
+VoteModel.cast_vote(user_id: user2_id, post_id: post1_id, vote_type: 1) # Jane upvotes post 1
+VoteModel.cast_vote(user_id: user3_id, post_id: post1_id, vote_type: 1) # Doe upvotes post 1
+
+VoteModel.cast_vote(user_id: user2_id, post_id: post2_id, vote_type: 1) # Jane upvotes post 2
+VoteModel.cast_vote(user_id: user3_id, post_id: post2_id, vote_type: -1) # Doe downvotes post 2
+
+VoteModel.cast_vote(user_id: user1_id, post_id: post3_id, vote_type: 1) # John upvotes post 3
+
+# Seed votes for comments
+VoteModel.cast_vote(user_id: user2_id, comment_id: comment1_id, vote_type: 1) # Jane upvotes comment 1
+VoteModel.cast_vote(user_id: user3_id, comment_id: comment1_id, vote_type: -1) # Doe downvotes comment 1
+
+VoteModel.cast_vote(user_id: user1_id, comment_id: comment2_id, vote_type: 1) # John upvotes comment 2
+VoteModel.cast_vote(user_id: user3_id, comment_id: comment2_id, vote_type: 1) # Doe upvotes comment 2
+
+VoteModel.cast_vote(user_id: user2_id, comment_id: reply1_id, vote_type: 1) # Jane upvotes reply 1
+VoteModel.cast_vote(user_id: user1_id, comment_id: reply2_id, vote_type: -1) # John downvotes reply 2
+
+p Comment.get_comments(post_id: post3_id, user_id: user1_id)
+
+# Display seeded comments with dynamic votes
+puts "Comments for post #{post3_id}:"
+comments = Comment.get_comments(post_id: post3_id, user_id: user1_id)
+
+comments.each do |comment|
+  total_votes = VoteModel.total_votes(comment_id: comment['id'])
+  puts "Comment ID: #{comment['id']}, Text: #{comment['comment_text']}, Votes: #{total_votes}"
+end

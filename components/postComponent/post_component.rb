@@ -2,6 +2,7 @@
 
 require BASE_COMPONENT_PATH
 require File.join(DATABASE_PATH, '/models/comment.rb')
+require File.join(DATABASE_PATH, '/models/vote.rb')
 
 class PostComponent < BaseComponent
   def truncate(text, length: 100, omission: '...')
@@ -10,9 +11,25 @@ class PostComponent < BaseComponent
     "#{text[0, length]}#{omission}"
   end
 
-  def initialize(post, preview = true)
+  def time_ago_in_words(timestamp)
+    seconds_diff = (Time.now - timestamp).to_i
+    case seconds_diff
+    when 0..59
+      "#{seconds_diff} seconds ago"
+    when 60..3599
+      "#{seconds_diff / 60} minutes ago"
+    when 3600..86_399
+      "#{seconds_diff / 3600} hours ago"
+    else
+      "#{seconds_diff / 86_400} days ago"
+    end
+  end
+
+  def initialize(post, preview = true, user_id = nil)
     @post = post
     @comment_count = Comment.comment_count(post['id'])
+    @vote_count = VoteModel.total_votes(post_id: post['id'])
+    @user_vote = VoteModel.user_vote(post_id: post['id'], user_id: user_id)
     @preview = preview
     super()
   end

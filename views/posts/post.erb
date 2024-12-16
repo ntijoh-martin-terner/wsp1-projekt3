@@ -1,7 +1,7 @@
-<div class="bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-200 min-h-screen p-4 rounded-lg shadow-md">
+<div class="bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-200 min-h-screen p-4 shadow-md">
   <!-- Post Component -->
   <div class="mb-6">
-    <%= PostComponent(@post, false) %>
+    <%= PostComponent(@post, false, @user_id) %>
   </div>
 
   <!-- Add Comment Form -->
@@ -11,6 +11,8 @@
 
   <!-- Comment Section -->
   <div>
-    <%= CommentSectionComponent(@post, @grouped_comments, nil) %>
+    <%= CommentSectionComponent(@post, @grouped_comments, nil, 1, @offset, @limit) %>
   </div>
+
+  
 </div>

@@ -1,54 +1,63 @@
-<div class="w-full bg-white border border-gray-200 <%=@preview ? 'rounded-lg' : ''%> shadow-md dark:bg-gray-800 dark:border-gray-700">
-    <!-- Post Media -->
-    <% if @post['media_url'] %>
-        <a href="#">
-            <img class="rounded-t-lg object-cover w-full h-56" src="<%= @post['media_url'] %>" alt="Post media" />
+<div class="w-full bg-white border border-gray-200 rounded-lg shadow-md dark:bg-gray-800 dark:border-gray-700 flex flex-col items-center text-center">
+  <!-- Header: Channel and User -->
+  <div class="w-full p-4 bg-gray-100 dark:bg-gray-900 border-b dark:border-gray-700">
+    <div class="flex justify-between items-center w-full max-w-2xl mx-auto">
+      <span class="text-sm font-medium text-gray-600 dark:text-gray-400">
+        <a href="/channel/<%= @post['channel_id'] %>" class="hover:underline">
+          <%= @post['channel_name'] || 'Unknown Channel' %>
         </a>
+      </span>
+      <span class="text-sm font-medium text-gray-600 dark:text-gray-400">
+        Posted by <a href="/user/<%= @post['user_id'] %>" class="hover:underline">@<%= @post['username'] || 'Anonymous' %></a>
+      </span>
+    </div>
+  </div>
+
+  <!-- Post Content -->
+  <div class="w-full flex flex-col items-center p-5 space-y-4">
+    <!-- Media (Optional) -->
+    <% if @post['media_url'] %>
+      <a href="/post/<%= @post['id'] %>" class="block w-full max-w-2xl">
+        <img class="w-full h-64 object-cover rounded-lg" src="<%= @post['media_url'] %>" alt="Post media" />
+      </a>
     <% end %>
 
-    <div class="p-5">
-        <!-- Post Title -->
-        <a href="#">
-            <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
-                <%= truncate(@post['content'], length: 50) %>
-            </h5>
+    <!-- Title -->
+    <a href="/post/<%= @post['id'] %>" class="w-full max-w-2xl">
+      <h5 class="text-xl font-bold tracking-tight text-gray-900 dark:text-white">
+        <%= truncate(@post['content'], length: 50) %>
+      </h5>
+    </a>
+
+    <!-- Excerpt -->
+    <p class="w-full max-w-2xl font-normal text-gray-700 dark:text-gray-400">
+      <%= truncate(@post['content'], length: 150) %>
+    </p>
+
+    <!-- Metadata: Votes, Comments -->
+    <div class="flex items-center justify-center space-x-6 text-gray-500 dark:text-gray-400">
+      <!-- Upvotes/Downvotes -->
+      <div class="flex items-center space-x-2">
+        <%= VoteComponent('/posts/votes/', @vote_count, @user_vote) %>
+      </div>
+
+      <!-- Comment Count -->
+      <div class="flex items-center space-x-2">
+        <a href="/post/<%=@post['id']%>">
+            <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M7 10h10v2H7z" />
+            <path fill-rule="evenodd" d="M6 3h12a3 3 0 013 3v10a3 3 0 01-3 3H9l-4 4V6a3 3 0 011-3zm12 2H6a1 1 0 00-1 1v11.586L8.586 16H18a1 1 0 001-1V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+            </svg>
+            <span><%= @comment_count %> Comments</span>
         </a>
-
-        <!-- Post Content -->
-        <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">
-            <%= truncate(@post['content'], length: 150) %>
-        </p>
-
-        <!-- Metadata -->
-        <div class="mb-3 flex items-center space-x-4 text-sm text-gray-500 dark:text-gray-400">
-            <span>
-                <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
-                    <path fill-rule="evenodd" d="M11 4.717c-2.286-.58-4.16-.756-7.045-.71A1.99 1.99 0 0 0 2 6v11c0 1.133.934 2.022 2.044 2.007 2.759-.038 4.5.16 6.956.791V4.717Zm2 15.081c2.456-.631 4.198-.829 6.956-.791A2.013 2.013 0 0 0 22 16.999V6a1.99 1.99 0 0 0-1.955-1.993c-2.885-.046-4.76.13-7.045.71v15.081Z" clip-rule="evenodd"/>
-                </svg>
-                <%= @comment_count %> comments
-            </span>
-            <span> 
-                <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
-                    <path fill-rule="evenodd" d="M15.03 9.684h3.965c.322 0 .64.08.925.232.286.153.532.374.717.645a2.109 2.109 0 0 1 .242 1.883l-2.36 7.201c-.288.814-.48 1.355-1.884 1.355-2.072 0-4.276-.677-6.157-1.256-.472-.145-.924-.284-1.348-.404h-.115V9.478a25.485 25.485 0 0 0 4.238-5.514 1.8 1.8 0 0 1 .901-.83 1.74 1.74 0 0 1 1.21-.048c.396.13.736.397.96.757.225.36.32.788.269 1.211l-1.562 4.63ZM4.177 10H7v8a2 2 0 1 1-4 0v-6.823C3 10.527 3.527 10 4.176 10Z" clip-rule="evenodd"/>
-                </svg>
-                <%= @post['upvotes'] %> upvotes
-            </span>
-            <span>
-                <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
-                    <path fill-rule="evenodd" d="M8.97 14.316H5.004c-.322 0-.64-.08-.925-.232a2.022 2.022 0 0 1-.717-.645 2.108 2.108 0 0 1-.242-1.883l2.36-7.201C5.769 3.54 5.96 3 7.365 3c2.072 0 4.276.678 6.156 1.256.473.145.925.284 1.35.404h.114v9.862a25.485 25.485 0 0 0-4.238 5.514c-.197.376-.516.67-.901.83a1.74 1.74 0 0 1-1.21.048 1.79 1.79 0 0 1-.96-.757 1.867 1.867 0 0 1-.269-1.211l1.562-4.63ZM19.822 14H17V6a2 2 0 1 1 4 0v6.823c0 .65-.527 1.177-1.177 1.177Z" clip-rule="evenodd"/>
-                </svg>
-                <%= @post['downvotes'] %> downvotes
-            </span>
-        </div>
-
-        <!-- Read More Button -->
-        <%if @preview%>
-            <a href="/post/<%=@post['id']%>" class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-                Read more
-                <svg class="rtl:rotate-180 w-3.5 h-3.5 ms-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
-                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9" />
-                </svg>
-            </a>
-        <%end%>
+      </div>
     </div>
+  </div>
+
+  <!-- Footer: Time Ago -->
+  <div class="w-full py-3 border-t dark:border-gray-700">
+    <span class="text-sm text-gray-500 dark:text-gray-400">
+      Posted <%= time_ago_in_words(Time.parse(@post['created_at'])) %> ago
+    </span>
+  </div>
 </div>

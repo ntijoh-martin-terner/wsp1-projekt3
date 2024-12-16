@@ -1,0 +1,11 @@
+<% @posts.each_with_index  do |post, index| %>
+  <div 
+    <% if index == @posts.size - 1 %>
+      hx-get="/posts/more?offset=<%=@next_offset%>" 
+      hx-trigger="revealed" 
+      hx-swap="afterend"
+    <% end %>
+  >
+    <%= PostComponent(post, true, @user_id) %>
+  </div>
+<% end %>

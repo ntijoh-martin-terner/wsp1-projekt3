@@ -22,6 +22,9 @@ class App < Sinatra::Base
     settings.asset_bundler.add_js(:flowbite, paths: [
                                     [File.join(APP_ROOT, 'node_modules/flowbite/dist/flowbite.min.js'), false]
                                   ])
+    settings.asset_bundler.add_js(:htmx, paths: [
+                                    [File.join(APP_ROOT, 'assets/js/htmx.min.js'), false]
+                                  ])
 
     # CSS group
     settings.asset_bundler.add_css(:application, paths: [

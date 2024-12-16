@@ -12,32 +12,57 @@ class Post < App
 
   get '/:post_id' do |post_id|
     @post = PostModel.get_post_from_id(post_id)
-    # @comment_count = Comment.comment_count(post_id)
-    @comments = Comment.get_comments(post_id)
+    @offset = params[:offset]&.to_i || 0
+    @limit = [params[:limit]&.to_i || 40, 40].min
+
+    @user_id = session[:user_id]
+
+    @comments = Comment.get_comments(post_id: post_id, user_id: @user_id, limit: @limit, offset: @offset)
 
     @grouped_comments = @comments.group_by { |comment| comment['parent_comment_id'] }
-
-    p @comments
-
-    p 'PFEJ GROUPED COMMENTS'
-
-    p @grouped_comments
 
     erb :"posts/post"
   end
 
   post '/:post_id/comment' do |post_id|
-    parent_id = params[:parent_id] == 'nil' ? nil : params[:parent_id]
+    parent_id = params[:parent_id].empty? ? nil : params[:parent_id]
     content = params[:content]
 
     # Validate the comment
     redirect back if content.strip.empty?
 
     # Save the comment to the database
-    Comment.create_comment(post_id: post_id, parent_id: parent_id, user_id: session[:user_id], content: content)
+    Comment.insert(post_id: post_id, parent_comment_id: parent_id, user_id: session[:user_id], comment_text: content)
     # Hardcoded user_id for now
 
     # Redirect back to the same post page
-    redirect "/post/#{post_id}"
+    redirect back
+  end
+
+  get '/:post_id/comments/:comment_id/vote' do |post_id, comment_id|
+  end
+
+  get '/:post_id/comments/?:comment_id?' do |post_id, comment_id|
+    @post = PostModel.get_post_from_id(post_id)
+
+    @user_id = session[:user_id]
+    @offset = params[:offset]&.to_i || 0
+    @limit = [params[:limit]&.to_i || 40, 40].min
+
+    # Decide whether to fetch root comments or threaded comments
+    @comments = if comment_id
+                  Comment.get_comments(root_id: comment_id, post_id: post_id, limit: @limit, offset: @offset,
+                                       user_id: @user_id)
+                else
+                  Comment.get_comments(post_id: post_id, limit: @limit, offset: @offset, user_id: @user_id)
+                end
+
+    if @comments.empty?
+      halt 204 # No Content
+    end
+
+    @grouped_comments = @comments.group_by { |comment| comment['parent_comment_id'] }
+
+    CommentSectionComponent(@post, @grouped_comments, comment_id&.to_i, 1, @offset, @limit)
   end
 end
