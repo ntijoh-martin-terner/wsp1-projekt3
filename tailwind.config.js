@@ -1,6 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  content: ["./views/**/*.erb", "./components/**/*.erb", "./node_modules/flowbite/**/*.js", "./views/*.erb"],
+  content: ["./views/**/*.erb", "./components/**/*.erb", "./node_modules/flowbite/**/*.js", "./views/*.erb", "./assets/js/*.js"],
   theme: {
     extend: {
       colors: {

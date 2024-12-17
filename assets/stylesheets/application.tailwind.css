@@ -1,3 +1,39 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Default Button Styling */
+.vote-button {
+  border-color: #e5e7eb; /* gray-300 */
+  color: #6b7280; /* gray-500 */
+  background-color: transparent;
+  transition: all 0.2s ease-in-out;
+}
+
+.vote-button svg {
+  stroke: currentColor;
+  fill: none;
+  transition: all 0.2s ease-in-out;
+}
+
+/* Hover State */
+.vote-button:hover {
+  border-color: #3b82f6; /* blue-500 */
+  color: #3b82f6; /* blue-500 */
+}
+
+.vote-button:hover svg {
+  stroke: #3b82f6; /* blue-500 */
+}
+
+/* Active State */
+.vote-button.active {
+  background-color: #3b82f6; /* blue-500 */
+  border-color: #3b82f6;
+  color: #ffffff; /* white */
+}
+
+.vote-button.active svg {
+  fill: #ffffff; /* white */
+  stroke: #3b82f6; /* blue-500 */
+}

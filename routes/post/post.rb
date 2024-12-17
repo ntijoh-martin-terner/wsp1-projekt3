@@ -3,6 +3,7 @@
 require APP_PATH
 require File.join(DATABASE_PATH, '/models/post.rb')
 require File.join(DATABASE_PATH, '/models/comment.rb')
+require File.join(DATABASE_PATH, '/models/vote.rb')
 require 'digest'
 
 class Post < App
@@ -39,7 +40,27 @@ class Post < App
     redirect back
   end
 
-  get '/:post_id/comments/:comment_id/vote' do |post_id, comment_id|
+  post '/:post_id/upvote' do |post_id|
+    user_id = session[:user_id]
+    @user_vote = VoteModel.cast_vote(post_id: post_id, vote_type: 1, user_id: user_id)
+    content_type :json
+    # redirect back
+  end
+  post '/:post_id/downvote' do |post_id|
+    user_id = session[:user_id]
+    @user_vote = VoteModel.cast_vote(post_id: post_id, vote_type: -1, user_id: user_id)
+    # redirect back
+  end
+
+  post '/comments/:comment_id/downvote' do |comment_id|
+    user_id = session[:user_id]
+    @user_vote = VoteModel.cast_vote(comment_id: comment_id, vote_type: -1, user_id: user_id)
+    # redirect back
+  end
+  post '/comments/:comment_id/upvote' do |comment_id|
+    user_id = session[:user_id]
+    @user_vote = VoteModel.cast_vote(comment_id: comment_id, vote_type: 1, user_id: user_id)
+    # redirect back
   end
 
   get '/:post_id/comments/?:comment_id?' do |post_id, comment_id|

@@ -38,7 +38,7 @@
     <div class="flex items-center justify-center space-x-6 text-gray-500 dark:text-gray-400">
       <!-- Upvotes/Downvotes -->
       <div class="flex items-center space-x-2">
-        <%= VoteComponent('/posts/votes/', @vote_count, @user_vote) %>
+        <%= VoteComponent("/post/#{@post['id']}", @vote_count, @user_vote) %>
       </div>
 
       <!-- Comment Count -->

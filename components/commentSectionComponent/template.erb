@@ -5,7 +5,7 @@
       <p class="font-semibold text-gray-900 dark:text-gray-200"><%= comment["username"] %></p>
       <p class="text-gray-700 dark:text-gray-300"><%= comment["comment_text"] %></p>
       <p class="text-sm text-gray-500 dark:text-gray-400">Posted at: <%= comment["created_at"] %></p>
-      <%= VoteComponent("post/#{@post['id']}/comments/#{comment['id']}/vote", comment["total_votes"], comment["user_vote"]) %>
+      <%= VoteComponent("/post/comments/#{comment['id']}", comment["total_votes"], comment["user_vote"]) %>
     </div>
 
     <!-- Add Reply Form -->
