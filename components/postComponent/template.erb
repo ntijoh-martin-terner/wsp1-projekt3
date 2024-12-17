@@ -1,4 +1,4 @@
-<div class="w-full bg-white border border-gray-200 rounded-lg shadow-md dark:bg-gray-800 dark:border-gray-700 flex flex-col items-center text-center">
+<div class="w-full bg-white border border-gray-200 shadow-md dark:bg-gray-800 dark:border-gray-700 flex flex-col items-center text-center">
   <!-- Header: Channel and User -->
   <div class="w-full p-4 bg-gray-100 dark:bg-gray-900 border-b dark:border-gray-700">
     <div class="flex justify-between items-center w-full max-w-2xl mx-auto">
@@ -34,30 +34,42 @@
       <%= truncate(@post['content'], length: 150) %>
     </p>
 
-    <!-- Metadata: Votes, Comments -->
-    <div class="flex items-center justify-center space-x-6 text-gray-500 dark:text-gray-400">
-      <!-- Upvotes/Downvotes -->
-      <div class="flex items-center space-x-2">
-        <%= VoteComponent("/post/#{@post['id']}", @vote_count, @user_vote) %>
+    <div class="flex flex-col space-y-3">
+      <!-- Row 1: Votes and Comments -->
+      <div class="flex items-center justify-between space-x-6 text-gray-500 dark:text-gray-400">
+
+        <!-- Votes Section -->
+        <div class="flex items-center space-x-2">
+          <div class="flex flex-col items-center">
+            <!-- Upvote/Downvote Buttons -->
+            <%= VoteComponent("/post/#{@post['id']}", @vote_count, @user_vote) %>
+          </div>
+          <span class="text-gray-800 dark:text-white font-semibold">
+            <%= @votes %> Votes
+          </span>
+        </div>
+
+        <!-- Comments Section -->
+        <div class="flex items-center space-x-2">
+          <a href="/post/<%=@post['id']%>" class="flex items-center hover:text-blue-500">
+            <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+              <path fill-rule="evenodd" d="M3 6a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-6.616l-2.88 2.592C8.537 20.461 7 19.776 7 18.477V17H5a2 2 0 0 1-2-2V6Zm4 2a1 1 0 0 0 0 2h5a1 1 0 1 0 0-2H7Zm8 0a1 1 0 1 0 0 2h2a1 1 0 1 0 0-2h-2Zm-8 3a1 1 0 1 0 0 2h2a1 1 0 1 0 0-2H7Zm5 0a1 1 0 1 0 0 2h5a1 1 0 1 0 0-2h-5Z" clip-rule="evenodd"/>
+            </svg>
+            <span class="text-gray-800 dark:text-white font-semibold">
+              <%= @comment_count %> Comments
+            </span>
+          </a>
+        </div>
       </div>
 
-      <!-- Comment Count -->
-      <div class="flex items-center space-x-2">
-        <a href="/post/<%=@post['id']%>">
-            <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
-            <path d="M7 10h10v2H7z" />
-            <path fill-rule="evenodd" d="M6 3h12a3 3 0 013 3v10a3 3 0 01-3 3H9l-4 4V6a3 3 0 011-3zm12 2H6a1 1 0 00-1 1v11.586L8.586 16H18a1 1 0 001-1V6a1 1 0 00-1-1z" clip-rule="evenodd" />
-            </svg>
-            <span><%= @comment_count %> Comments</span>
-        </a>
+      <!-- Row 2: Separator -->
+      <hr class="border-t border-gray-300 dark:border-gray-700">
+
+      <!-- Optional Row 3: Additional Metadata -->
+      <div class="text-sm text-gray-500 dark:text-gray-400">
+        <p>Posted on: <%= @post['created_at'] %> • <%= time_ago_in_words(Time.parse(@post['created_at'])) %></p>
       </div>
     </div>
   </div>
-
   <!-- Footer: Time Ago -->
-  <div class="w-full py-3 border-t dark:border-gray-700">
-    <span class="text-sm text-gray-500 dark:text-gray-400">
-      Posted <%= time_ago_in_words(Time.parse(@post['created_at'])) %> ago
-    </span>
-  </div>
 </div>
