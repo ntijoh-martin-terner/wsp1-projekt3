@@ -1,75 +1,115 @@
-<div class="w-full bg-white border border-gray-200 shadow-md dark:bg-gray-800 dark:border-gray-700 flex flex-col items-center text-center">
+<div class="w-full bg-white border border-gray-200 shadow-md rounded-sm dark:bg-gray-800 dark:border-gray-700 transition-transform hover:scale-[1.01]">
   <!-- Header: Channel and User -->
   <div class="w-full p-4 bg-gray-100 dark:bg-gray-900 border-b dark:border-gray-700">
-    <div class="flex justify-between items-center w-full max-w-2xl mx-auto">
-      <span class="text-sm font-medium text-gray-600 dark:text-gray-400">
-        <a href="/channel/<%= @post['channel_id'] %>" class="hover:underline">
+    <div class="flex justify-between items-center w-full text-sm text-gray-600 dark:text-gray-400">
+      <span>
+        <a href="/channel/<%= @post['channel_id'] %>" class="hover:underline hover:text-blue-500">
           <%= @post['channel_name'] || 'Unknown Channel' %>
         </a>
       </span>
-      <span class="text-sm font-medium text-gray-600 dark:text-gray-400">
-        Posted by <a href="/user/<%= @post['user_id'] %>" class="hover:underline">@<%= @post['username'] || 'Anonymous' %></a>
+      <span>
+        Posted by <a href="/user/<%= @post['user_id'] %>" class="hover:underline hover:text-blue-500">
+          @<%= @post['username'] || 'Anonymous' %>
+        </a>
       </span>
     </div>
-  </div>
 
-  <!-- Post Content -->
-  <div class="w-full flex flex-col items-center p-5 space-y-4">
-    <!-- Media (Optional) -->
-    <% if @post['media_url'] %>
-      <a href="/post/<%= @post['id'] %>" class="block w-full max-w-2xl">
-        <img class="w-full h-64 object-cover rounded-lg" src="<%= @post['media_url'] %>" alt="Post media" />
-      </a>
-    <% end %>
+    <hr class="w-full border-t border-gray-300 dark:border-gray-700" />
 
-    <!-- Title -->
-    <a href="/post/<%= @post['id'] %>" class="w-full max-w-2xl">
-      <h5 class="text-xl font-bold tracking-tight text-gray-900 dark:text-white">
-        <%= truncate(@post['content'], length: 50) %>
+    <a href="/post/<%= @post['id'] %>" class="block">
+      <h5 class="text-2xl text-center mt-3 font-bold tracking-tight text-gray-900 dark:text-white mb-2 hover:text-blue-500">
+        <%= @post['title'] %>
       </h5>
     </a>
 
-    <!-- Excerpt -->
-    <p class="w-full max-w-2xl font-normal text-gray-700 dark:text-gray-400">
-      <%= truncate(@post['content'], length: 150) %>
-    </p>
+    <!-- Divider -->
+  </div>
 
-    <div class="flex flex-col space-y-3">
-      <!-- Row 1: Votes and Comments -->
-      <div class="flex items-center justify-between space-x-6 text-gray-500 dark:text-gray-400">
+  
 
-        <!-- Votes Section -->
-        <div class="flex items-center space-x-2">
-          <div class="flex flex-col items-center">
-            <!-- Upvote/Downvote Buttons -->
-            <%= VoteComponent("/post/#{@post['id']}", @vote_count, @user_vote) %>
-          </div>
-          <span class="text-gray-800 dark:text-white font-semibold">
-            <%= @votes %> Votes
-          </span>
+  <!-- Post Content -->
+  <div class="p-5 w-full min-h-[12rem] max-w-none flex flex-col items-center space-y-4">
+    <!-- Media Carousel -->
+    <!-- Media Carousel -->
+    <% if @post['media_urls'] && !@post['media_urls'].empty? %>
+      <% media_items = @post['media_urls'].split(',') %>
+      <div id="media-carousel-<%= @post['id'] %>" class="relative w-full max-w-4xl mx-auto" data-carousel="slide">
+        <!-- Wrapper for slides -->
+        <div class="relative h-64 overflow-hidden rounded-lg">
+          <% media_items.each_with_index do |media_url, index| %>
+            <div class="<%= index == 0 ? '' : 'hidden' %> duration-700 ease-in-out" data-carousel-item>
+              <% if media_url.end_with?('.mp4') %>
+                <video class="w-full h-full object-cover" controls>
+                  <source src="<%= media_url %>" type="video/mp4">
+                </video>
+              <% else %>
+                <img src="<%= media_url %>" class="w-full h-full object-cover" alt="Post media">
+              <% end %>
+            </div>
+          <% end %>
         </div>
 
-        <!-- Comments Section -->
-        <div class="flex items-center space-x-2">
-          <a href="/post/<%=@post['id']%>" class="flex items-center hover:text-blue-500">
-            <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
-              <path fill-rule="evenodd" d="M3 6a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-6.616l-2.88 2.592C8.537 20.461 7 19.776 7 18.477V17H5a2 2 0 0 1-2-2V6Zm4 2a1 1 0 0 0 0 2h5a1 1 0 1 0 0-2H7Zm8 0a1 1 0 1 0 0 2h2a1 1 0 1 0 0-2h-2Zm-8 3a1 1 0 1 0 0 2h2a1 1 0 1 0 0-2H7Zm5 0a1 1 0 1 0 0 2h5a1 1 0 1 0 0-2h-5Z" clip-rule="evenodd"/>
-            </svg>
-            <span class="text-gray-800 dark:text-white font-semibold">
-              <%= @comment_count %> Comments
+        <!-- Navigation buttons (hidden if only one media item) -->
+        <% unless media_items.size == 1 %>
+          <button type="button" class="absolute top-0 left-0 z-30 flex items-center justify-center h-full px-4 cursor-pointer group focus:outline-none" data-carousel-prev>
+            <span class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-gray-800/30 dark:bg-gray-800/50 group-hover:bg-gray-800/60">
+              <svg aria-hidden="true" class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+              </svg>
             </span>
-          </a>
-        </div>
+          </button>
+          <button type="button" class="absolute top-0 right-0 z-30 flex items-center justify-center h-full px-4 cursor-pointer group focus:outline-none" data-carousel-next>
+            <span class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-gray-800/30 dark:bg-gray-800/50 group-hover:bg-gray-800/60">
+              <svg aria-hidden="true" class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+              </svg>
+            </span>
+          </button>
+        <% end %>
       </div>
+    <% end %>
 
-      <!-- Row 2: Separator -->
-      <hr class="border-t border-gray-300 dark:border-gray-700">
 
-      <!-- Optional Row 3: Additional Metadata -->
-      <div class="text-sm text-gray-500 dark:text-gray-400">
-        <p>Posted on: <%= @post['created_at'] %> • <%= time_ago_in_words(Time.parse(@post['created_at'])) %></p>
-      </div>
+    <!-- Content -->
+    <div class="w-full max-w-none text-center flex-grow overflow-auto">
+      <p class="text-gray-700 dark:text-gray-400 text-sm max-h-[20rem] overflow-y-auto">
+        <%= truncate(@post['content'], length: 150) %>
+      </p>
     </div>
   </div>
-  <!-- Footer: Time Ago -->
+
+
+  <!-- Divider -->
+  <hr class="w-full border-t border-gray-300 dark:border-gray-700" />
+
+  <!-- Footer: Votes, Comments, and Metadata -->
+  <div class="p-4 flex flex-col items-center space-y-3">
+    <!-- Votes and Comments -->
+    <div class="flex justify-between w-full max-w-2xl text-gray-600 dark:text-gray-400">
+      <!-- Votes -->
+      <div class="flex flex-col items-center space-y-1">
+        <%= VoteComponent("/post/#{@post['id']}", @vote_count, @user_vote) %>
+        <span class="text-sm font-semibold text-gray-800 dark:text-white">
+          <%= @votes %> Votes
+        </span>
+      </div>
+
+      <!-- Comments -->
+      <div class="flex flex-col items-center space-y-1">
+        <a href="/post/<%=@post['id']%>" class="hover:text-blue-500 transition-all flex flex-col items-center">
+          <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+            <path fill-rule="evenodd" d="M3 6a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-6.616l-2.88 2.592C8.537 20.461 7 19.776 7 18.477V17H5a2 2 0 0 1-2-2V6Zm4 2a1 1 0 0 0 0 2h5a1 1 0 1 0 0-2H7Zm8 0a1 1 0 1 0 0 2h2a1 1 0 1 0 0-2h-2Zm-8 3a1 1 0 1 0 0 2h2a1 1 0 1 0 0-2H7Zm5 0a1 1 0 1 0 0 2h5a1 1 0 1 0 0-2h-5Z" clip-rule="evenodd"/>
+          </svg>
+          <span class="text-sm font-semibold text-gray-800 dark:text-white">
+            <%= @comment_count %> Comments
+          </span>
+        </a>
+      </div>
+    </div>
+
+    <!-- Metadata -->
+    <div class="text-xs text-gray-500 dark:text-gray-400 mt-2 text-center">
+      Posted <%= time_ago_in_words(Time.parse(@post['created_at'])) %> ago
+    </div>
+  </div>
 </div>

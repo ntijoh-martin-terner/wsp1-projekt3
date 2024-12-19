@@ -12,11 +12,14 @@ class PostModel < BaseModel
     SELECT
       post.*,
       user.username AS username,
-      channel.name AS channel_name
+      channel.name AS channel_name,
+      COALESCE(GROUP_CONCAT(media.media_url), NULL) AS media_urls
     FROM post
     JOIN user ON post.user_id = user.id
     JOIN channel ON post.channel_id = channel.id
-    ORDER BY substr(post.id * ?, length(post.id) + 2) -- Seeded pseudo-random order ABS((post.id * 12345) + ?)
+    LEFT JOIN media ON media.post_id = post.id
+    GROUP BY post.id, user.username, channel.name
+    ORDER BY substr(post.id * ?, length(post.id) + 2) -- Seeded pseudo-random order
     LIMIT ? OFFSET ?
     SQL
   end
@@ -26,11 +29,14 @@ class PostModel < BaseModel
     SELECT
       post.*,
       user.username AS username,
-      channel.name AS channel_name
+      channel.name AS channel_name,
+      COALESCE(GROUP_CONCAT(media.media_url), NULL) AS media_urls
     FROM post
     JOIN user ON post.user_id = user.id
     JOIN channel ON post.channel_id = channel.id
+    LEFT JOIN media ON media.post_id = post.id
     WHERE post.id = ?
+    GROUP BY post.id, user.username, channel.name
     LIMIT 1
     SQL
   end
@@ -41,8 +47,9 @@ class PostModel < BaseModel
       id INTEGER PRIMARY KEY,
       user_id INTEGER REFERENCES user(id) ON DELETE CASCADE, -- Links to the user table, deletes posts if user is deleted
       channel_id INTEGER REFERENCES channel(id) ON DELETE CASCADE, -- Links to subreddit-like groups
-      content TEXT NOT NULL, -- Post content (text)
-      media_url TEXT, -- Optional media (image, video, etc.)
+      title TEXT NOT NULL CHECK (LENGTH(title) <= 100), -- Max title length: 100 characters
+      content TEXT NOT NULL CHECK (LENGTH(content) <= 1000), -- Max content length: 1000 characters
+      -- media_url TEXT, -- Optional media (image, video, etc.)
       created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- Post creation time
       updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP -- Post last update time
     SQL

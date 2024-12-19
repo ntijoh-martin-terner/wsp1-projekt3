@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require_relative '../config/environment'
+require 'fileutils'
 require_relative './models/user'
 require_relative './models/vote'
 require_relative './models/post'
@@ -10,6 +11,7 @@ require_relative './models/channel/channel_role'
 require_relative './models/channel/role_permission'
 require_relative './models/channel/channel_membership'
 require_relative './models/comment'
+require_relative './models/media'
 
 # Drop tables in reverse dependency order
 ChannelMembership.drop
@@ -22,6 +24,8 @@ VoteModel.drop
 Channel.drop
 Channel.create
 User.drop
+MediaModel.drop
+MediaModel.create
 
 # Create tables
 User.create
@@ -63,20 +67,31 @@ ChannelMembership.insert(user_id: user2_id, channel_id: channel_id, channel_role
 ChannelMembership.insert(user_id: user3_id, channel_id: channel_id, channel_role_id: member_role_id) # Doe is Member
 
 # Seed posts
+upload_dir = File.expand_path('../public/uploads', __dir__) # Define upload directory
+
+# Seed first post
 post1_id = PostModel.insert(
   user_id: user1_id,
   channel_id: channel_id,
-  content: 'Hello, world! This is my first post.',
-  media_url: 'https://example.com/image.png'
+  title: 'First Post!',
+  content: 'Hello, world! This is my first post.'
 )
+
+# Add media attachments for post1
+hero_image_path = File.expand_path('../public/img/hero/hero.png', __dir__)
+file = { filename: 'hero.png', tempfile: File.open(hero_image_path) }
+MediaModel.add_media(post_id: post1_id, file: file, upload_dir: upload_dir)
+
 post2_id = PostModel.insert(
   user_id: user1_id,
   channel_id: channel_id,
+  title: 'Another Post :)',
   content: 'This is another post with just text content.'
 )
 post3_id = PostModel.insert(
   user_id: user2_id,
   channel_id: channel_id,
+  title: 'mod',
   content: 'Moderator Jane’s post in the Ruby group!'
 )
 
@@ -84,6 +99,7 @@ post3_id = PostModel.insert(
   PostModel.insert(
     user_id: user2_id,
     channel_id: channel_id,
+    title: 'SPAM',
     content: "Spam number ##{i}"
   )
 end

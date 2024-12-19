@@ -14,7 +14,7 @@ class Post < App
   get '/:post_id' do |post_id|
     @post = PostModel.get_post_from_id(post_id)
     @offset = params[:offset]&.to_i || 0
-    @limit = [params[:limit]&.to_i || 40, 40].min
+    @limit = [params[:limit]&.to_i || 20, 20].min
 
     @user_id = session[:user_id]
 
@@ -68,7 +68,7 @@ class Post < App
 
     @user_id = session[:user_id]
     @offset = params[:offset]&.to_i || 0
-    @limit = [params[:limit]&.to_i || 40, 40].min
+    @limit = [params[:limit]&.to_i || 20, 20].min
 
     # Decide whether to fetch root comments or threaded comments
     @comments = if comment_id
