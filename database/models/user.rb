@@ -2,7 +2,7 @@ require BASE_MODEL_PATH
 require 'bcrypt'
 require 'uri'
 
-class User < BaseModel
+class UserModel < BaseModel
   def self.hash_password(password)
     BCrypt::Password.create(password)
   end
@@ -11,11 +11,11 @@ class User < BaseModel
     BCrypt::Password.new(password_hash) == password
   end
 
-  def self.find_by_username(username)
+  def self.find_by_username(username: nil)
     db.execute("SELECT * FROM #{table_name} WHERE username = ?", [username]).first
   end
 
-  def self.find_by_id(id)
+  def self.find_by_id(id: nil)
     db.execute("SELECT * FROM #{table_name} WHERE id = ?", [id]).first
   end
 

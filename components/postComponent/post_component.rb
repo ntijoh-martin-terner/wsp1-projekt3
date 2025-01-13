@@ -27,7 +27,7 @@ class PostComponent < BaseComponent
 
   def initialize(post, preview = true, user_id = nil)
     @post = post
-    @comment_count = Comment.comment_count(post['id'])
+    @comment_count = CommentModel.comment_count(post_id: post['id'])
     @vote_count = VoteModel.total_votes(post_id: post['id'])
     @user_vote = VoteModel.user_vote(post_id: post['id'], user_id: user_id)
     @preview = preview

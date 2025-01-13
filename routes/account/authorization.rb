@@ -26,9 +26,9 @@ class Authorization < App
     username = params['username']
     password = params['password']
 
-    matching_user = User.find_by_username(username)
+    matching_user = UserModel.find_by_username(username: username)
 
-    if matching_user.nil? || !User.valid_password?(password, matching_user['password_hash'])
+    if matching_user.nil? || !UserModel.valid_password?(password, matching_user['password_hash'])
       status 404
       redirect back
     end

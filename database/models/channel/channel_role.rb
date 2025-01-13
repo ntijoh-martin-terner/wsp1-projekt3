@@ -2,8 +2,8 @@ require BASE_MODEL_PATH
 require 'bcrypt'
 require 'uri'
 
-class ChannelRole < BaseModel
-  def self.find_id_by_name_and_group(channel_id, name)
+class ChannelRoleModel < BaseModel
+  def self.find_id_by_name_and_group(channel_id:, name:)
     result = db.execute('SELECT id FROM channel_roles WHERE channel_id = ? AND name = ? LIMIT 1', channel_id, name)
     result.first['id'] if result.any?
   end

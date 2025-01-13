@@ -37,9 +37,13 @@ class App < Sinatra::Base
                                    ])
   end
 
+  not_found do
+    erb :"/error/404"
+  end
+
   before do
     @logged_in = !session[:user_id].nil?
-    @user = User.find_by_id(session[:user_id]) if @logged_in
+    @user = UserModel.find_by_id(id: session[:user_id]) if @logged_in
   end
 
   # Serve JavaScript bundles dynamically
@@ -111,19 +115,40 @@ class App < Sinatra::Base
       class_name = File.basename(component, '.rb').split('_').map(&:capitalize).join
 
       # Dynamically define a helper method for the component
-      @helpers << define_method(class_name.to_sym) do |*args|
+      @helpers << define_method(class_name.to_sym) do |*args, **kwargs|
         # Instantiate the component with provided arguments
         component_class = Object.const_get(class_name)
-        component_instance = component_class.new(*args)
+
+        component_instance =
+          if kwargs.any?
+            component_class.new(**kwargs)
+          else
+            component_class.new(*args)
+          end
 
         # Render the component's ERB template
         component_instance.render
       end
 
-      BaseComponent.define_method(class_name.to_sym) do |*args|
+      BaseComponent.define_method(class_name.to_sym) do |*args, **kwargs|
         # Instantiate the component with provided arguments
         component_class = Object.const_get(class_name)
-        component_instance = component_class.new(*args)
+
+        # p 'DWPDWKDOKPOKWPDOKWODOWSKWKODKWW'
+        # p args
+        # p kwargs
+        # p(*args)
+        # p(**kwargs)
+
+        # Handle positional and keyword arguments
+        component_instance =
+          if kwargs.any?
+            component_class.new(**kwargs)
+          else
+            component_class.new(*args)
+          end
+
+        # component_instance = component_class.new(*args)
 
         # Render the component's ERB template
         component_instance.render

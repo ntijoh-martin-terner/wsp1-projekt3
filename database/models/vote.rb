@@ -62,9 +62,9 @@ class VoteModel < BaseModel
     # Static method to fetch pseudo-random posts
     super(<<-SQL)
       id INTEGER PRIMARY KEY AUTOINCREMENT,
-      user_id INTEGER NOT NULL,
-      comment_id INTEGER, -- Nullable: Used for comments
-      post_id INTEGER,    -- Nullable: Used for posts
+      user_id INTEGER REFERENCES user(id) ON DELETE CASCADE,
+      comment_id INTEGER REFERENCES comment(id), -- Nullable: Used for comments
+      post_id INTEGER REFERENCES post(id),    -- Nullable: Used for posts
       vote_type INTEGER NOT NULL CHECK (vote_type IN (1, -1)), -- 1 for upvote, -1 for downvote
       created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
       UNIQUE(user_id, post_id, comment_id) -- Ensures a user can only vote once per post/comment

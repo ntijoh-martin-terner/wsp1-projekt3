@@ -2,7 +2,7 @@ require BASE_MODEL_PATH
 require 'bcrypt'
 require 'uri'
 
-class RolePermission < BaseModel
+class RolePermissionModel < BaseModel
   def self.create
     super(<<-SQL)
       id INTEGER PRIMARY KEY,

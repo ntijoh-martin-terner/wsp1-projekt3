@@ -2,7 +2,15 @@ require BASE_MODEL_PATH
 require 'bcrypt'
 require 'uri'
 
-class Channel < BaseModel
+class ChannelModel < BaseModel
+  def self.get_channel_from_id(channel_id)
+    db.execute(<<-SQL, [channel_id]).first
+    SELECT *
+    FROM channel
+    WHERE id = ?
+    SQL
+  end
+
   def self.create
     super(<<-SQL)
       id INTEGER PRIMARY KEY,

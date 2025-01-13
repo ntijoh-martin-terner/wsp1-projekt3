@@ -19,16 +19,21 @@ class Home < App
   get '/home' do
     @limit = 10
     @offset = 0
-    @posts = PostModel.random_posts(daily_seed, @offset, @limit)
+    @posts = PostModel.retrieve_posts(seed: daily_seed, offset: @offset, limit: @limit, random_order: true)
     @user_id = session[:user_id]
 
     erb :"posts/home"
   end
 
   get '/more' do
-    offset = params[:offset].to_i
-    limit = 10
-    posts = PostModel.random_posts(daily_seed, offset, limit)
+    offset = params[:offset].to_i || 0
+    limit = params[:limit].to_i || 10
+    order_by = params[:order_by] || nil
+    search_query = params[:search_query] || nil
+    channel_ids = params[:channel_ids] || []
+    order = params[:order]
+    posts = PostModel.retrieve_posts(seed: daily_seed, offset: offset, limit: limit, channel_ids: channel_ids,
+                                     order_by: order_by, search_query: search_query, random_order: true)
     user_id = session[:user_id]
 
     next_offset = offset + limit
@@ -37,7 +42,8 @@ class Home < App
       halt 204 # No Content
     end
 
-    PostListComponent(posts, user_id, next_offset)
+    PostListComponent(posts: posts, user_id: user_id, offset: next_offset, limit: limit, channel_ids: channel_ids,
+                      order: order)
 
     # erb :'posts/partials/post_list', layout: false, find_layout: false
   end

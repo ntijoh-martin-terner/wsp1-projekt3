@@ -1,0 +1,31 @@
+<div class="bg-gray-100 dark:bg-gray-900 min-h-screen py-10">
+  <div class="max-w-6xl mx-auto bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden">
+    <!-- Channel Header -->
+    <div class="p-6 border-b border-gray-200 dark:border-gray-700">
+      <h1 class="text-2xl font-bold text-gray-900 dark:text-white"><%= @name %></h1>
+      <p class="mt-2 text-gray-600 dark:text-gray-400"><%= @description %></p>
+      <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
+        <% begin %>
+          Created on: <%= Time.parse(@created_at).strftime('%B %d, %Y') %>
+        <% rescue ArgumentError %>
+          Created on: Invalid date format
+        <% end %>
+      </p>
+
+      <%=PostFilteringComponent(params, "/channel/#{@channel_ids[0]}")%>
+    </div>
+
+  </div>
+  <!-- Post List -->
+  <div class="p-6 w-full flex flex-col justify-center align-middle items-center">
+    <h2 class="text-xl font-semibold text-gray-900 dark:text-white mb-4">Posts</h2>
+    <% if @posts && @posts.any? %>
+      <!-- Container for posts -->
+      <div id="post-container" class="max-w-6xl min-w-20 w-80 flex flex-col gap-10">
+          <%=PostListComponent(posts: @posts, user_id: @user_id, offset: @offset + @limit, limit: @limit, channel_ids: @channel_ids, order_by: @order_by, search_query: @search_query, order_by: @order_by )%>
+      </div>
+    <% else %>
+      <p class="text-gray-600 dark:text-gray-400">No posts available for this channel.</p>
+    <% end %>
+  </div>
+</div>

@@ -2,7 +2,7 @@ require BASE_MODEL_PATH
 require 'bcrypt'
 require 'uri'
 
-class ChannelMembership < BaseModel
+class ChannelMembershipModel < BaseModel
   def self.permissions_for(user_id:, channel_id:)
     db.execute(<<-SQL, user_id, channel_id)
       SELECT permission.name

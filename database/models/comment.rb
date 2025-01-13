@@ -2,8 +2,8 @@ require BASE_MODEL_PATH
 require 'bcrypt'
 require 'uri'
 
-class Comment < BaseModel
-  def self.comment_count(post_id)
+class CommentModel < BaseModel
+  def self.comment_count(post_id: nil)
     db.execute(<<-SQL, post_id)[0]['comment_count']
       SELECT COUNT(*) AS comment_count
       FROM comment

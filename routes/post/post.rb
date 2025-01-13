@@ -18,7 +18,7 @@ class Post < App
 
     @user_id = session[:user_id]
 
-    @comments = Comment.get_comments(post_id: post_id, user_id: @user_id, limit: @limit, offset: @offset)
+    @comments = CommentModel.get_comments(post_id: post_id, user_id: @user_id, limit: @limit, offset: @offset)
 
     @grouped_comments = @comments.group_by { |comment| comment['parent_comment_id'] }
 
@@ -33,7 +33,8 @@ class Post < App
     redirect back if content.strip.empty?
 
     # Save the comment to the database
-    Comment.insert(post_id: post_id, parent_comment_id: parent_id, user_id: session[:user_id], comment_text: content)
+    CommentModel.insert(post_id: post_id, parent_comment_id: parent_id, user_id: session[:user_id],
+                        comment_text: content)
     # Hardcoded user_id for now
 
     # Redirect back to the same post page
@@ -72,10 +73,10 @@ class Post < App
 
     # Decide whether to fetch root comments or threaded comments
     @comments = if comment_id
-                  Comment.get_comments(root_id: comment_id, post_id: post_id, limit: @limit, offset: @offset,
-                                       user_id: @user_id)
+                  CommentModel.get_comments(root_id: comment_id, post_id: post_id, limit: @limit, offset: @offset,
+                                            user_id: @user_id)
                 else
-                  Comment.get_comments(post_id: post_id, limit: @limit, offset: @offset, user_id: @user_id)
+                  CommentModel.get_comments(post_id: post_id, limit: @limit, offset: @offset, user_id: @user_id)
                 end
 
     if @comments.empty?
