@@ -9,10 +9,12 @@ class Channel < App
     # Handle sorting
 
     @order_by = case params[:sort]
-                when 'recent' then 'created_at DESC'
+                when 'recent' then 'post.created_at DESC'
+                when 'old' then 'post.created_at ASC'
                 when 'upvotes' then 'upvotes DESC'
+                when 'votes' then 'votes DESC'
                 when 'downvotes' then 'downvotes DESC'
-                else 'created_at DESC'
+                else 'post.created_at DESC'
                 end
 
     # Handle search

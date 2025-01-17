@@ -25,6 +25,30 @@ class Home < App
     erb :"posts/home"
   end
 
+  get '/' do
+    @order_by = case params[:sort]
+                when 'recent' then 'post.created_at DESC'
+                when 'old' then 'post.created_at ASC'
+                when 'upvotes' then 'upvotes DESC'
+                when 'votes' then 'votes DESC'
+                when 'downvotes' then 'downvotes DESC'
+                else 'post.created_at DESC'
+                end
+
+    # Handle search
+    @search_query = params[:search] || nil
+
+    @limit = 20
+    @offset = 0
+    @order = 'created_at_desc'
+    @user_id = session[:user_id]
+    @channel_ids = []
+    @posts = PostModel.retrieve_posts(offset: @offset, limit: @limit, channel_ids: [],
+                                      search_query: @search_query, order_by: @order_by)
+
+    erb :'posts/home'
+  end
+
   get '/more' do
     offset = params[:offset].to_i || 0
     limit = params[:limit].to_i || 10

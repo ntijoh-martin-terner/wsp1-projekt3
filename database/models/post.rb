@@ -13,11 +13,15 @@ class PostModel < BaseModel
         post.*,
         user.username AS username,
         channel.name AS channel_name,
-        COALESCE(GROUP_CONCAT(media.media_url), NULL) AS media_urls
+        COALESCE(GROUP_CONCAT(media.media_url), NULL) AS media_urls,
+        COALESCE(SUM(CASE WHEN vote.vote_type = 1 THEN 1 ELSE 0 END), 0) AS upvotes,
+        COALESCE(SUM(CASE WHEN vote.vote_type = -1 THEN 1 ELSE 0 END), 0) AS downvotes,
+        COALESCE(SUM(vote.vote_type), 0) AS votes
       FROM post
       JOIN user ON post.user_id = user.id
       JOIN channel ON post.channel_id = channel.id
       LEFT JOIN media ON media.post_id = post.id
+      LEFT JOIN vote ON vote.post_id = post.id
       WHERE 1 = 1
     SQL
 
@@ -44,7 +48,7 @@ class PostModel < BaseModel
       sql += " GROUP BY post.id \n ORDER BY substr(post.id * ?, length(post.id) + 2)"
       params << seed
     elsif order_by
-      sql += " GROUP BY post.id \n ORDER BY post.#{order_by}"
+      sql += " GROUP BY post.id \n ORDER BY #{order_by}"
     else
       sql += " GROUP BY post.id \n ORDER BY post.created_at DESC"
     end
