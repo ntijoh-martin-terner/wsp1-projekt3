@@ -7,7 +7,7 @@ class PostModel < BaseModel
     @table_name ||= 'post'
   end
 
-  def self.retrieve_posts(seed: nil, offset: 0, limit: 100, channel_ids: nil, order_by: nil, random_order: false, search_query: nil)
+  def self.retrieve_posts(seed: nil, offset: 0, limit: 100, channel_ids: nil, user_ids: nil, order_by: nil, random_order: false, search_query: nil)
     sql = <<-SQL
       SELECT
         post.*,
@@ -32,9 +32,12 @@ class PostModel < BaseModel
       placeholders = Array.new(channel_ids.size, '?').join(', ')
       sql += " AND channel.id IN (#{placeholders})"
       params.concat(channel_ids)
-    elsif channel_ids
-      # Handle empty channel_ids explicitly
-      # sql += ' AND 0 = 1' # No posts will match
+    end
+
+    if user_ids && !user_ids.empty?
+      placeholders = Array.new(user_ids.size, '?').join(', ')
+      sql += " AND user.id IN (#{placeholders})"
+      params.concat(user_ids)
     end
 
     # Add search filtering if search_query is provided

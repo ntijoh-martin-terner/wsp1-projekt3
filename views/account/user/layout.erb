@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/assets/application.css">
+    <script src="/assets/flowbite.js"></script>
+    <title><%=PROJECT_NAME%> Account</title>
+</head>
+<body>
+  <%=Navbar(0, @user, {'Home' => '/', 'About' => '/about', 'Ads' => '/ads'})%>
+  <div class="w-full bg-white divide-y divide-gray-100 shadow dark:bg-gray-700 dark:divide-gray-600 text-white text-center"> 
+    <%=@account_user_name%>
+  </div>
+  <%= yield %>
+</body>
+</html>

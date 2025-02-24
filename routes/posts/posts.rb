@@ -77,12 +77,10 @@ class Posts < App
     @order = 'created_at_desc'
     @user_id = session[:user_id]
     @channel_ids = []
+    @user_ids = []
     @posts = PostModel.retrieve_posts(offset: @offset, limit: @limit, channel_ids: [],
                                       search_query: @search_query, order_by: @order_by,
                                       random_order: params[:sort] == 'random')
-
-    p 'here are POSTS'
-    p @posts
 
     erb :'posts/posts'
   end
@@ -93,8 +91,9 @@ class Posts < App
     order_by = params[:order_by] || nil
     search_query = params[:search_query] || nil
     channel_ids = params[:channel_ids] || []
+    user_ids = params[:user_ids] || []
     order = params[:order]
-    posts = PostModel.retrieve_posts(seed: daily_seed, offset: offset, limit: limit, channel_ids: channel_ids,
+    posts = PostModel.retrieve_posts(seed: daily_seed, offset: offset, limit: limit, user_ids: user_ids, channel_ids: channel_ids,
                                      order_by: order_by, search_query: search_query, random_order: true)
     user_id = session[:user_id]
 
