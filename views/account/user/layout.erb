@@ -4,11 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/assets/application.css">
-    <script src="/assets/flowbite.js"></script>
+    <%# <script src="/assets/flowbite.js"></script> %>
+    <script src="/assets/post.js"></script>
     <title><%=PROJECT_NAME%> Account</title>
 </head>
 <body class="bg-white dark:bg-gray-900">
-  <%=Navbar(0, @user, {'Home' => '/', 'About' => '/about', 'Ads' => '/ads'})%>
+  <%=Navbar(path_info: request.fullpath, user: @user, pages: {'Home' => '/', 'About' => '/about', 'Ads' => '/ads'})%>
   <div class="w-full divide-y divide-gray-100 shadow dark:divide-gray-600 text-white text-center p-12"> 
     <%=@account_user_name%>
   </div>

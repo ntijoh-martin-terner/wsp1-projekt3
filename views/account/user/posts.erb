@@ -1,6 +1,10 @@
-<%= TabComponent(path_info: @path_info, tabs_name: 'User Profile Options', tabs: { 'Posts' => "/account/#{@user_id}/posts", 'Settings' => "/account/#{@user_id}/settings" }) %>
+<div class="flex flex-col gap-12 pb-12">
+  <%if @current_account%>
+    <%= TabComponent(path_info: request.fullpath, tabs_name: 'User Profile Options', tabs: { 'Posts' => "/account/#{@user_id}/posts", 'Settings' => "/account/#{@user_id}/settings" }) %>
+  <%end%>
 
-<%= TabComponent(path_info: @path_info, tabs_name: 'Post Sort Options', tabs: { 'New' => "/account/#{@user_id}/posts/new", 'Hot' => "/account/#{@user_id}/posts/hot", 'Rising' => "/account/#{@user_id}/posts/rising", 'Random' => "/account/#{@user_id}/posts/random" }) %>
+  <%= TabComponent(path_info: request.fullpath, tabs_name: 'Post Sort Options', tabs: { 'New' => "/account/#{@user_id}/posts/new", 'Hot' => "/account/#{@user_id}/posts/hot", 'Rising' => "/account/#{@user_id}/posts/rising", 'Random' => "/account/#{@user_id}/posts/random" }) %>
+</div>
 
 <div class="bg-white border-gray-200 dark:bg-gray-900 w-full flex flex-col items-center">
   <!-- Container for posts -->

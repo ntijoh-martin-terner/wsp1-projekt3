@@ -9,7 +9,7 @@
 </head>
 <body>
   <%# <%= Profile({username: 'oudend', mail: 'abc', user_profile_id: nil}, true) %>
-  <%=Navbar(0, @user, {'Home' => '/', 'About' => '/about', 'Ads' => '/ads'})%>
+  <%=Navbar(path_info: request.fullpath, user: @user, pages: {'Home' => '/', 'About' => '/about', 'Ads' => '/ads'})%>
   <%= yield %>
   <%=Footer()%>
 </body>

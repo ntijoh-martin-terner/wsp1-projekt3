@@ -3,8 +3,8 @@
 require BASE_COMPONENT_PATH
 
 class Navbar < BaseComponent
-  def initialize(current_page = 0, user = nil, pages = {'Home' => '/', 'About' => '/about'})
-    @current_page = current_page
+  def initialize(path_info: nil, user: nil, pages: { 'Home' => '/', 'About' => '/about' })
+    @current_page_index = pages.values.index(path_info) || -1
     @user = user
     @pages = pages
     super()
