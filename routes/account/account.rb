@@ -42,34 +42,25 @@ class Account < App
     @offset = 0
     @user_ids = [@user_id]
 
-    # Define sorting options
-    case sorting
-    when 'new', nil
-      order_by = 'recent'
-      random_order = false
-    when 'hot'
-      order_by = 'upvotes'
-      random_order = false
-    when 'rising'
-      order_by = 'votes'
-      random_order = false
-    when 'random'
-      order_by = nil
-      random_order = true
-    else
-      halt 404 # Return 404 for unknown sorting types
-    end
+    @order_by = case sorting
+                when 'new' then 'post.created_at DESC'
+                when 'hot' then 'post.created_at ASC'
+                when 'rising' then 'upvotes DESC'
+                when 'downvotes' then 'downvotes DESC'
+                end
+
+    @random_order = true if sorting == 'random'
 
     # Special handling for random sorting
-    seed = sorting == 'random' ? rand(25_000) : nil
+    @seed = @random_order ? rand(25_000) : nil
 
     @posts = PostModel.retrieve_posts(
       offset: @offset,
       limit: @limit,
       user_ids: @user_ids,
-      order_by: order_by,
-      random_order: random_order,
-      seed: seed
+      order_by: @order_by,
+      random_order: @random_order,
+      seed: @seed
     )
 
     erb :"account/user/posts"

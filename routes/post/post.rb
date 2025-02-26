@@ -45,23 +45,23 @@ class Post < App
     user_id = session[:user_id]
     @user_vote = VoteModel.cast_vote(post_id: post_id, vote_type: 1, user_id: user_id)
     content_type :json
-    # redirect back
+    redirect back
   end
   post '/:post_id/downvote' do |post_id|
     user_id = session[:user_id]
     @user_vote = VoteModel.cast_vote(post_id: post_id, vote_type: -1, user_id: user_id)
-    # redirect back
+    redirect back
   end
 
   post '/comments/:comment_id/downvote' do |comment_id|
     user_id = session[:user_id]
     @user_vote = VoteModel.cast_vote(comment_id: comment_id, vote_type: -1, user_id: user_id)
-    # redirect back
+    redirect back
   end
   post '/comments/:comment_id/upvote' do |comment_id|
     user_id = session[:user_id]
     @user_vote = VoteModel.cast_vote(comment_id: comment_id, vote_type: 1, user_id: user_id)
-    # redirect back
+    redirect back
   end
 
   get '/:post_id/comments/?:comment_id?' do |post_id, comment_id|

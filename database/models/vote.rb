@@ -48,6 +48,24 @@ class VoteModel < BaseModel
     SQL
   end
 
+  # Get the total upvotes for a post or comment
+  def self.upvote_count(post_id: nil, comment_id: nil)
+    db.execute(<<-SQL, [post_id, comment_id]).first['upvote_count'] || 0
+      SELECT COUNT(*) AS upvote_count
+      FROM #{table_name}
+      WHERE post_id IS ? AND comment_id IS ? AND vote_type = 1
+    SQL
+  end
+
+  # Get the total downvotes for a post or comment
+  def self.downvote_count(post_id: nil, comment_id: nil)
+    db.execute(<<-SQL, [post_id, comment_id]).first['downvote_count'] || 0
+      SELECT COUNT(*) AS downvote_count
+      FROM #{table_name}
+      WHERE post_id IS ? AND comment_id IS ? AND vote_type = -1
+    SQL
+  end
+
   # Get the user's current vote for a post or comment
   def self.user_vote(user_id:, post_id: nil, comment_id: nil)
     row = db.execute(<<-SQL, [user_id, post_id, comment_id]).first
