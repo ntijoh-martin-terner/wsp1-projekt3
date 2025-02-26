@@ -7,11 +7,12 @@
     <script src="/assets/flowbite.js"></script>
     <title><%=PROJECT_NAME%> Account</title>
 </head>
-<body>
+<body class="bg-white dark:bg-gray-900">
   <%=Navbar(0, @user, {'Home' => '/', 'About' => '/about', 'Ads' => '/ads'})%>
-  <div class="w-full bg-white divide-y divide-gray-100 shadow dark:bg-gray-700 dark:divide-gray-600 text-white text-center"> 
+  <div class="w-full divide-y divide-gray-100 shadow dark:divide-gray-600 text-white text-center p-12"> 
     <%=@account_user_name%>
   </div>
   <%= yield %>
+  <%=Footer()%>
 </body>
 </html>

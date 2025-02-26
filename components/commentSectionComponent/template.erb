@@ -2,7 +2,7 @@
   <div class="ml-4 mb-4 p-4 border-l-4 border-gray-300 bg-white dark:bg-gray-800 dark:border-gray-600 rounded-lg shadow-sm">
     <!-- Comment Content -->
     <div>
-      <p class="font-semibold text-gray-900 dark:text-gray-200"><%= comment["username"] %></p>
+      <a class="font-semibold text-gray-900 dark:text-gray-200" href="/account/<%=comment["user_id"]%>"><%= comment["username"] %><a>
       <p class="text-gray-700 dark:text-gray-300"><%= comment["comment_text"] %></p>
       <p class="text-sm text-gray-500 dark:text-gray-400">Posted at: <%= comment["created_at"] %></p>
       <%= VoteComponent("/post/comments/#{comment['id']}", comment["total_votes"], comment["user_vote"]) %>

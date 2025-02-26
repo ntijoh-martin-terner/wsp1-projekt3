@@ -17,39 +17,46 @@ class Posts < App
   end
 
   get '/new' do
+    @path_info = request.fullpath
     @limit = 10
     @offset = 0
-    @posts = PostModel.retrieve_posts(seed: daily_seed, offset: @offset, limit: @limit, random_order: false,
+    @posts = PostModel.retrieve_posts(offset: @offset, limit: @limit, random_order: false,
                                       order_by: 'recent')
 
     erb :"posts/posts"
   end
 
   get '/hot' do
+    @path_info = request.fullpath
     @limit = 10
     @offset = 0
-    @posts = PostModel.retrieve_posts(seed: daily_seed, offset: @offset, limit: @limit, random_order: false,
+    @posts = PostModel.retrieve_posts(offset: @offset, limit: @limit, random_order: false,
                                       order_by: 'upvotes')
 
     erb :"posts/posts"
   end
 
   get '/rising' do
+    @path_info = request.fullpath
     @limit = 10
     @offset = 0
-    @posts = PostModel.retrieve_posts(seed: daily_seed, offset: @offset, limit: @limit, random_order: false,
+    @posts = PostModel.retrieve_posts(offset: @offset, limit: @limit, random_order: false,
                                       order_by: 'votes')
 
     erb :"posts/posts"
   end
 
   get '/random' do
-    @posts = PostModel.retrieve_posts(seed: daily_seed, offset: @offset, limit: @limit, random_order: true)
+    @path_info = request.fullpath
+    seed = rand(25_000)
+
+    @posts = PostModel.retrieve_posts(seed: seed, offset: @offset, limit: @limit, random_order: true)
 
     erb :"posts/posts"
   end
 
   get '/home' do
+    @path_info = request.fullpath
     @limit = 10
     @offset = 0
     @channel_ids = []
@@ -72,6 +79,7 @@ class Posts < App
     # Handle search
     @search_query = params[:search] || nil
 
+    @path_info = request.fullpath
     @limit = 20
     @offset = 0
     @order = 'created_at_desc'
