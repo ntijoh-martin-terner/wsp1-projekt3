@@ -12,6 +12,6 @@ class Qr < App
     qr = RQRCode::QRCode.new("#{request.base_url}/post/#{post_id}")
 
     content_type 'image/png'
-    qr.as_png(size: 200).to_s
+    qr.as_png(size: 200, border_modules: 0).to_s
   end
 end

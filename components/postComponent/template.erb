@@ -25,7 +25,7 @@
   </div>
 
   <!-- Post Content -->
-  <div class="p-5 pb-1 w-full flex flex-col space-y-4 font-thin">
+  <div class="p-5 pt-0 pb-1 w-full flex flex-col space-y-4 font-thin">
     <!-- Media Carousel -->
     <% if @post['media_urls'] && !@post['media_urls'].empty? %>
       <% media_items = @post['media_urls'].split(',') %>
@@ -38,7 +38,9 @@
                   <source src="<%= media_url %>" type="video/mp4">
                 </video>
               <% else %>
-                <img src="<%= media_url %>" class="w-full h-64 object-cover" alt="Post media">
+                <button type="button" data-modal-target="image-modal-<%=@post['id']%>" data-modal-toggle="image-modal-<%=@post['id']%>" class="w-full h-full p-0 m-0 border-none">
+                  <img src="<%= media_url %>" class="w-full h-64 object-contain" alt="Post media" onclick="openFullscreenModal('<%= media_url %>', '<%= @post['id'] %>')">
+                </button>
               <% end %>
             </div>
           <% end %>
@@ -46,10 +48,24 @@
       </div>
     <% end %>
 
+    <!-- Fullscreen Modal -->
+    <%if !media_items.nil?%>
+      <div id="image-modal-<%= @post['id'] %>" class="hidden fixed inset-0 bg-black bg-opacity-75 flex justify-center items-center z-50">
+        <div class="relative p-4 max-w-3xl">
+          <button type="button" class="absolute top-4 right-4 text-white text-lg" data-modal-hide="image-modal-<%= @post['id'] %>">✕</button>
+          <img id="fullscreen-image" src="" class="w-full h-auto max-h-screen object-contain rounded-lg">
+        </div>
+      </div>
+    <%end%>
+
     <!-- Content -->
     <div class="w-full max-w-none text-left max-h-[12rem] overflow-y-auto">
-      <p class="text-gray-700 dark:text-gray-400 text-sm">
-        <%= truncate(@post['content'], length: 100) %>
+      <p class="text-gray-800 dark:text-gray-300 text-sm">
+        <%if @preview%>
+          <%= truncate(@post['content'], length: 100) %>
+        <%else%>
+          <%=@post['content']%>
+        <%end%>
       </p>
     </div>
   </div>
@@ -84,9 +100,9 @@
                 <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Share this Post</h3>
 
                 <!-- Shareable Link -->
-                <div class="flex items-center justify-between rounded-lg px-3 py-2 bg-gray-100 dark:bg-gray-700">
+                <div class="flex items-center justify-between rounded-lg px-1 py-1 mb-4 bg-gray-100 dark:bg-gray-700">
                   <input type="text" id="share-link-<%= @post['id'] %>" value="<%=@base_url%>/post/<%= @post['id'] %>" 
-                    class="w-full bg-transparent text-gray-900 dark:text-white outline-none cursor-text" readonly>
+                    class="w-full bg-transparent text-gray-900 dark:text-white border-none outline-none cursor-text" readonly>
                 </div>
 
                 <div class="flex justify-center">

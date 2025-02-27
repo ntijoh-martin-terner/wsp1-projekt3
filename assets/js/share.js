@@ -5,3 +5,8 @@ function copyToClipboard(postId) {
         document.querySelector(`[data-modal-hide="popup-modal-${postId}"]`).click();
     });
 }
+
+function openFullscreenModal(imageUrl, postId) {
+    console.log(imageUrl, postId)
+    document.getElementById('fullscreen-image').src = imageUrl;
+}
