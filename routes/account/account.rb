@@ -45,8 +45,7 @@ class Account < App
     @order_by = case sorting
                 when 'new' then 'post.created_at DESC'
                 when 'hot' then 'post.created_at ASC'
-                when 'rising' then 'upvotes DESC'
-                when 'downvotes' then 'downvotes DESC'
+                when 'controversial' then 'downvotes DESC'
                 end
 
     @random_order = true if sorting == 'random'

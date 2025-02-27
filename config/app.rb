@@ -28,7 +28,8 @@ class App < Sinatra::Base
     settings.asset_bundler.add_js(:post, paths: [
                                     [File.join(APP_ROOT, 'assets/js/htmx.min.js'), false],
                                     [File.join(APP_ROOT, 'node_modules/flowbite/dist/flowbite.min.js'), false],
-                                    [File.join(APP_ROOT, 'assets/js/voteComponent.js'), true]
+                                    [File.join(APP_ROOT, 'assets/js/voteComponent.js'), true],
+                                    [File.join(APP_ROOT, 'assets/js/share.js'), true]
                                   ])
 
     # CSS group

@@ -60,13 +60,48 @@
     <div class="flex justify-between w-full max-w-2xl text-gray-600 dark:text-gray-400 text-xs pb-2">
       <!-- Share -->
       <div class="flex flex-col items-center font-thin">
-        <button class="hover:text-blue-500 text-base transition-all flex flex-row gap-1 items-center dark:text-white">
+        <button type="button" data-modal-target="popup-modal-<%=@post['id']%>" data-modal-toggle="popup-modal-<%=@post['id']%>" class="hover:text-blue-500 text-base transition-all flex flex-row gap-1 items-center dark:text-white">
           <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
             <path d="M17.5 3a3.5 3.5 0 0 0-3.456 4.06L8.143 9.704a3.5 3.5 0 1 0-.01 4.6l5.91 2.65a3.5 3.5 0 1 0 .863-1.805l-5.94-2.662a3.53 3.53 0 0 0 .002-.961l5.948-2.667A3.5 3.5 0 1 0 17.5 3Z"/>
           </svg>
 
           Share
         </button>
+
+          <div id="popup-modal-<%= @post['id'] %>" tabindex="-1" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+            <div class="relative p-6 bg-white rounded-lg shadow-lg dark:bg-gray-800 w-full max-w-md">
+              <!-- Close Button -->
+              <button type="button"
+                class="absolute top-3 right-3 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200"
+                data-modal-hide="popup-modal-<%= @post['id'] %>">
+                <svg class="w-5 h-5" fill="none" viewBox="0 0 20 20" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 6l8 8M6 14l8-8"></path>
+                </svg>
+              </button>
+
+              <!-- Modal Content -->
+              <div class="text-center">
+                <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Share this Post</h3>
+
+                <!-- Shareable Link -->
+                <div class="flex items-center justify-between rounded-lg px-3 py-2 bg-gray-100 dark:bg-gray-700">
+                  <input type="text" id="share-link-<%= @post['id'] %>" value="<%=@base_url%>/post/<%= @post['id'] %>" 
+                    class="w-full bg-transparent text-gray-900 dark:text-white outline-none cursor-text" readonly>
+                </div>
+
+                <div class="flex justify-center">
+                  <img src="/qr/<%= @post['id'] %>" alt="QR Code for Post" class="w-32 h-32">
+                </div>
+
+                <!-- Copy Button -->
+                <button onclick="copyToClipboard('<%= @post['id'] %>')" 
+                  class="mt-4 w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 rounded-lg focus:outline-none focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-800">
+                  Copy Link
+                </button>
+              </div>
+            </div>
+          </div>
+
         <span class="text-xs text-gray-500">
           <%= @shares || 0 %> Shares
         </span>

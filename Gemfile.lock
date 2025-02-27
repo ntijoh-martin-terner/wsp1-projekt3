@@ -9,6 +9,7 @@ GEM
       rouge (>= 1.0.0)
     binding_of_caller (1.0.1)
       debug_inspector (>= 1.2.0)
+    chunky_png (1.4.0)
     debug_inspector (1.2.0)
     dotenv (3.1.4)
     erubi (1.13.0)
@@ -41,6 +42,10 @@ GEM
     rerun (0.14.0)
       listen (~> 3.0)
     rouge (4.5.1)
+    rqrcode (2.2.0)
+      chunky_png (~> 1.0)
+      rqrcode_core (~> 1.0)
+    rqrcode_core (1.2.0)
     ruby2_keywords (0.0.5)
     sassc (2.4.0)
       ffi (~> 1.9)
@@ -79,6 +84,7 @@ DEPENDENCIES
   rake
   rdiscount (~> 2.2)
   rerun
+  rqrcode (~> 2.2)
   sassc (~> 2.4)
   sinatra
   sinatra-url-for (~> 0.2.2)

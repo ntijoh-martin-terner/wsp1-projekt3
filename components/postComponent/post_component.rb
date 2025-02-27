@@ -25,9 +25,10 @@ class PostComponent < BaseComponent
     end
   end
 
-  def initialize(post, preview = true, user_id = nil)
+  def initialize(post: nil, preview: true, user_id: nil, base_url: nil)
     # to do: get a @upvotes variable(also rename to upvote_count)
     @post = post
+    @base_url = base_url
     @comment_count = CommentModel.comment_count(post_id: post['id'])
     @upvote_count = VoteModel.upvote_count(post_id: post['id'])
     @downvote_count = VoteModel.downvote_count(post_id: post['id'])

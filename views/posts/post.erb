@@ -1,7 +1,7 @@
 <div class="bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-200 min-h-screen p-4 shadow-md">
   <!-- Post Component -->
   <div class="mb-6">
-    <%= PostComponent(@post, false, @user_id) %>
+    <%= PostComponent(post: @post, preview: false, user_id: @user_id, base_url: request.base_url) %>
   </div>
 
   <!-- Add Comment Form -->

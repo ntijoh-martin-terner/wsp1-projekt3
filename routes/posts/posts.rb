@@ -16,55 +16,88 @@ class Posts < App
     redirect '/404' if session[:user_id].nil?
   end
 
-  get '/new' do
-    @path_info = request.fullpath
-    @limit = 10
-    @offset = 0
-    @posts = PostModel.retrieve_posts(offset: @offset, limit: @limit, random_order: false,
-                                      order_by: 'recent')
-
-    erb :"posts/posts"
-  end
-
-  get '/hot' do
-    @path_info = request.fullpath
-    @limit = 10
-    @offset = 0
-    @posts = PostModel.retrieve_posts(offset: @offset, limit: @limit, random_order: false,
-                                      order_by: 'upvotes')
-
-    erb :"posts/posts"
-  end
-
-  get '/rising' do
-    @path_info = request.fullpath
-    @limit = 10
-    @offset = 0
-    @posts = PostModel.retrieve_posts(offset: @offset, limit: @limit, random_order: false,
-                                      order_by: 'votes')
-
-    erb :"posts/posts"
-  end
-
-  get '/random' do
-    @path_info = request.fullpath
-    seed = rand(25_000)
-
-    @posts = PostModel.retrieve_posts(seed: seed, offset: @offset, limit: @limit, random_order: true)
-
-    erb :"posts/posts"
-  end
-
   get '/home' do
+    redirect '/posts/random'
+  end
+
+  get %r{/(new|hot|controversial|random)} do |sorting|
     @path_info = request.fullpath
+    @user_id = session[:user_id].to_i
+
     @limit = 10
     @offset = 0
-    @channel_ids = []
-    @posts = PostModel.retrieve_posts(seed: daily_seed, offset: @offset, limit: @limit, random_order: true)
-    @user_id = session[:user_id]
+
+    @order_by = case sorting
+                when 'new' then 'post.created_at DESC'
+                when 'hot' then 'upvotes DESC'
+                when 'controversial' then 'downvotes DESC'
+                end
+
+    @random_order = true if sorting == 'random'
+
+    # Special handling for random sorting
+    @seed = @random_order ? rand(25_000) : nil
+
+    @posts = PostModel.retrieve_posts(
+      offset: @offset,
+      limit: @limit,
+      order_by: @order_by,
+      random_order: @random_order,
+      seed: @seed
+    )
 
     erb :"posts/posts"
   end
+
+  # get '/new' do
+  #   @path_info = request.fullpath
+  #   @limit = 10
+  #   @offset = 0
+  #   @posts = PostModel.retrieve_posts(offset: @offset, limit: @limit, random_order: false,
+  #                                     order_by: 'recent')
+
+  #   erb :"posts/posts"
+  # end
+
+  # get '/hot' do
+  #   @path_info = request.fullpath
+  #   @limit = 10
+  #   @offset = 0
+  #   @posts = PostModel.retrieve_posts(offset: @offset, limit: @limit, random_order: false,
+  #                                     order_by: 'upvotes')
+
+  #   erb :"posts/posts"
+  # end
+
+  # get '/rising' do
+  #   @path_info = request.fullpath
+  #   @limit = 10
+  #   @offset = 0
+  #   @posts = PostModel.retrieve_posts(offset: @offset, limit: @limit, random_order: false,
+  #                                     order_by: 'votes')
+
+  #   erb :"posts/posts"
+  # end
+
+  # get '/random' do
+  #   @path_info = request.fullpath
+  #   seed = rand(25_000)
+
+  #   @posts = PostModel.retrieve_posts(seed: seed, offset: @offset, limit: @limit, random_order: true)
+
+  #   erb :"posts/posts"
+  # end
+
+  # get '/test' do
+  #   # @path_info = request.fullpath
+  #   @limit = 10
+  #   @offset = 0
+  #   @channel_ids = []
+  #   @posts = PostModel.retrieve_posts(seed: daily_seed, offset: @offset, limit: @limit, random_order: true)
+  #   @user_id = session[:user_id]
+
+  #   erb :"posts/posts"
+  # end
 
   get '/' do
     @order_by = case params[:sort]
@@ -79,10 +112,13 @@ class Posts < App
     # Handle search
     @search_query = params[:search] || nil
 
-    @path_info = request.fullpath
+    p @search_query
+    p '??? *^^'
+
+    # @path_info = request.fullpath
     @limit = 20
     @offset = 0
-    @order = 'created_at_desc'
+    # @order = 'created_at_desc'
     @user_id = session[:user_id]
     @channel_ids = []
     @user_ids = []
@@ -101,6 +137,14 @@ class Posts < App
     channel_ids = params[:channel_ids] || []
     user_ids = params[:user_ids] || []
     order = params[:order]
+    # order_by = case params[:sort]
+    #            when 'recent' then 'post.created_at DESC'
+    #            when 'old' then 'post.created_at ASC'
+    #            when 'upvotes' then 'upvotes DESC'
+    #            when 'votes' then 'votes DESC'
+    #            when 'downvotes' then 'downvotes DESC'
+    #            else 'post.created_at DESC'
+    #            end
     posts = PostModel.retrieve_posts(seed: daily_seed, offset: offset, limit: limit, user_ids: user_ids, channel_ids: channel_ids,
                                      order_by: order_by, search_query: search_query, random_order: true)
     user_id = session[:user_id]
@@ -112,7 +156,7 @@ class Posts < App
     end
 
     PostListComponent(posts: posts, user_id: user_id, offset: next_offset, limit: limit, channel_ids: channel_ids,
-                      order_by: order)
+                      order_by: order_by, search_query: search_query, user_ids: user_ids, base_url: request.base_url)
 
     # erb :'posts/partials/post_list', layout: false, find_layout: false
   end

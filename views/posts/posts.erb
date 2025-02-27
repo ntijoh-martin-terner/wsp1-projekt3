@@ -1,61 +1,8 @@
-<%# <div class="sm:hidden">
-    <label for="tabs" class="sr-only">Select post feed type</label>
-    <select id="tabs" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-        <option value="recent">New</option>
-        <option value="upvotes">Hot</option>
-        <option value="votes">Rising</option>
-        <option value="random">Random</option>
-    </select>
-</div>
-
-<script>
-    document.getElementById('tabs').addEventListener('change', function() {
-        window.location = "posts/" + this.value;
-    });
-</script>
-
-<ul class="hidden text-sm font-medium text-center text-gray-500 shadow-sm sm:flex dark:divide-gray-700 dark:text-gray-400">
-    <li class="w-full focus-within:z-10">
-        <a href="/posts/new" class="inline-block w-full p-4 text-gray-900 bg-gray-100 border-r border-gray-200 dark:border-gray-700 focus:ring-4 focus:ring-blue-300 active focus:outline-none dark:bg-gray-700 dark:text-white" aria-current="page">New</a>
-    </li>
-    <li class="w-full focus-within:z-10">
-        <a href="/posts/hot" class="inline-block w-full p-4 bg-white border-r border-gray-200 dark:border-gray-700 hover:text-gray-700 hover:bg-gray-50 focus:ring-4 focus:ring-blue-300 focus:outline-none dark:hover:text-white dark:bg-gray-800 dark:hover:bg-gray-700">Hot</a>
-    </li>
-    <li class="w-full focus-within:z-10">
-        <a href="/posts/rising" class="inline-block w-full p-4 bg-white border-r border-gray-200 dark:border-gray-700 hover:text-gray-700 hover:bg-gray-50 focus:ring-4 focus:ring-blue-300 focus:outline-none dark:hover:text-white dark:bg-gray-800 dark:hover:bg-gray-700">Rising</a>
-    </li>
-    <li class="w-full focus-within:z-10">
-        <a href="/posts/random" class="inline-block w-full p-4 bg-white border-s-0 border-gray-200 dark:border-gray-700 hover:text-gray-700 hover:bg-gray-50 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:hover:text-white dark:bg-gray-800 dark:hover:bg-gray-700">Random</a>
-    </li>
-</ul> %>
-
-<%= TabComponent(path_info: @path_info, tabs_name: 'Post Sort Options', tabs: { 'New' => '/posts/new', 'Hot' => '/posts/hot', 'Rising' => '/posts/rising', 'Random' => '/posts/random' }) %>
+<%= TabComponent(path_info: request.fullpath, tabs_name: 'Post Sort Options', tabs: { 'New' => '/posts/new', 'Hot' => '/posts/hot', 'Controversial' => '/posts/controversial', 'Random' => '/posts/random' }) %>
 
 <form class="max-w-full p-12 mx-auto bg-white dark:bg-gray-900" action="/posts/" method="get">
     <div class="flex">
         <label for="search-dropdown" class="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Search Posts</label>
-        <%# <button id="dropdown-button" data-dropdown-toggle="dropdown" class="shrink-0 z-10 inline-flex items-center py-2.5 px-4 text-sm font-medium text-center text-gray-900 bg-gray-100 border border-gray-300 rounded-s-lg hover:bg-gray-200 focus:ring-4 focus:outline-none focus:ring-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 dark:focus:ring-gray-700 dark:text-white dark:border-gray-600" type="button">
-        All categories 
-          <svg class="w-2.5 h-2.5 ms-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
-            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
-          </svg>
-        </button>
-        <div id="dropdown" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow-sm w-44 dark:bg-gray-700">
-            <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdown-button">
-            <li>
-                <button type="button" class="inline-flex w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Mockups</button>
-            </li>
-            <li>
-                <button type="button" class="inline-flex w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Templates</button>
-            </li>
-            <li>
-                <button type="button" class="inline-flex w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Design</button>
-            </li>
-            <li>
-                <button type="button" class="inline-flex w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Logos</button>
-            </li>
-            </ul>
-        </div> %>
         <div class="relative w-full">
             <input type="search" name="search" id="search-dropdown" class="block p-2.5 w-full z-20 text-sm text-gray-900 bg-gray-50 rounded-e-lg border-s-gray-50 border-s-2 border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-s-gray-700  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:border-blue-500" placeholder="Search Posts, Users, Channels..." required />
             <button type="submit" class="absolute top-0 end-0 p-2.5 text-sm font-medium h-full text-white bg-blue-700 rounded-e-lg border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
@@ -71,7 +18,7 @@
 <div class="bg-white border-gray-200 dark:bg-gray-900 w-full flex flex-col items-center">
   <!-- Container for posts -->
   <div id="post-container" class="w-full max-w-2xl md:max-w-3xl flex flex-col gap-4 md:gap-6">
-    <%= PostListComponent(posts: @posts, user_id: @user_id, offset: @offset + @limit, limit: @limit, channel_ids: @channel_ids, search_query: @search_query, order_by: @order_by) %>
+    <%= PostListComponent(posts: @posts, user_id: @user_id, offset: @offset + @limit, limit: @limit, channel_ids: @channel_ids, search_query: @search_query, order_by: @order_by, base_url: request.base_url) %>
   </div>
 
 

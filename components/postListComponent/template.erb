@@ -6,6 +6,6 @@
       hx-swap="afterend"
     <% end %>
   >
-    <%= PostComponent(post, true, @user_id) %>
+    <%= PostComponent(post: post, preview: true, user_id: @user_id, base_url: @base_url) %>
   </div>
 <% end %>

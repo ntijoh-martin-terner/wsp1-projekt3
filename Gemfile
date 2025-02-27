@@ -31,3 +31,5 @@ gem 'tailwindcss-ruby', '~> 3.4'
 gem 'puma'
 
 gem 'dotenv', '~> 3.1'
+
+gem "rqrcode", "~> 2.2"
