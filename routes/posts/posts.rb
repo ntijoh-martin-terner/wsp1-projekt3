@@ -108,20 +108,29 @@ class Posts < App
   # end
 
   get '/' do
-    @order_by = case params[:sort]
-                when 'recent' then 'post.created_at DESC'
-                when 'old' then 'post.created_at ASC'
-                when 'upvotes' then 'upvotes DESC'
-                when 'votes' then 'votes DESC'
-                when 'downvotes' then 'downvotes DESC'
-                else 'post.created_at DESC'
-                end
+    redirect '/posts/random' if params.nil?
+
+    # @order_by = case params[:sort]
+    #             when 'recent' then 'post.created_at DESC'
+    #             when 'old' then 'post.created_at ASC'
+    #             when 'upvotes' then 'upvotes DESC'
+    #             when 'votes' then 'votes DESC'
+    #             when 'downvotes' then 'downvotes DESC'
+    #             else 'post.created_at DESC'
+    #             end
+
+    @order_by = params[:order_by] || nil
+
+    p 'order by:'
+    p @order_by
 
     # Handle search
     @search_query = params[:search] || nil
 
-    p @search_query
-    p '??? *^^'
+    @random_order = params[:random_order] == 'true' || false
+
+    # p @search_query
+    # p '??? *^^'
 
     # @path_info = request.fullpath
     @limit = 20
@@ -130,9 +139,9 @@ class Posts < App
     @user_id = session[:user_id]
     @channel_ids = []
     @user_ids = []
-    @posts = PostModel.retrieve_posts(offset: @offset, limit: @limit, channel_ids: [],
+    @posts = PostModel.retrieve_posts(offset: @offset, limit: @limit, channel_ids: @channel_ids,
                                       search_query: @search_query, order_by: @order_by,
-                                      random_order: params[:sort] == 'random')
+                                      random_order: @random_order)
 
     erb :'posts/posts'
   end
@@ -140,11 +149,17 @@ class Posts < App
   get '/more' do
     offset = params[:offset].to_i || 0
     limit = params[:limit].to_i || 10
-    order_by = params[:order_by] || nil
+    order_by = params[:order_by] || 'post.created_at DESC'
     search_query = params[:search_query] || nil
     channel_ids = params[:channel_ids] || []
     user_ids = params[:user_ids] || []
-    order = params[:order]
+    random_order = params[:random_order] == 'true' || false
+
+    p 'order by:'
+    p order_by
+    p random_order
+
+    # order = params[:order]
     # order_by = case params[:sort]
     #            when 'recent' then 'post.created_at DESC'
     #            when 'old' then 'post.created_at ASC'
@@ -153,8 +168,9 @@ class Posts < App
     #            when 'downvotes' then 'downvotes DESC'
     #            else 'post.created_at DESC'
     #            end
-    posts = PostModel.retrieve_posts(seed: daily_seed, offset: offset, limit: limit, user_ids: user_ids, channel_ids: channel_ids,
-                                     order_by: order_by, search_query: search_query, random_order: true)
+    posts = PostModel.retrieve_posts(seed: daily_seed, offset: offset, limit: limit, user_ids: user_ids,
+                                     channel_ids: channel_ids, order_by: order_by,
+                                     search_query: search_query, random_order: random_order)
     user_id = session[:user_id]
 
     next_offset = offset + limit
@@ -164,7 +180,8 @@ class Posts < App
     end
 
     PostListComponent(posts: posts, user_id: user_id, offset: next_offset, limit: limit, channel_ids: channel_ids,
-                      order_by: order_by, search_query: search_query, user_ids: user_ids, base_url: request.base_url)
+                      order_by: order_by, search_query: search_query, user_ids: user_ids, base_url: request.base_url,
+                      random_order: random_order)
 
     # erb :'posts/partials/post_list', layout: false, find_layout: false
   end

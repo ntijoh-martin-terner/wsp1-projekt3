@@ -9,6 +9,6 @@
 <div class="bg-white border-gray-200 dark:bg-gray-900 w-full flex flex-col items-center">
   <!-- Container for posts -->
   <div id="post-container" class="w-full max-w-2xl md:max-w-3xl flex flex-col gap-4 md:gap-6">
-    <%= PostListComponent(posts: @posts, user_id: @user_id, offset: @offset + @limit, limit: @limit, user_ids: @user_ids, channel_ids: @channel_ids, search_query: @search_query, order_by: @order_by, base_url: request.base_url) %>
+    <%= PostListComponent(posts: @posts, user_id: @user_id, offset: @offset + @limit, limit: @limit, user_ids: @user_ids, channel_ids: @channel_ids, search_query: @search_query, order_by: @order_by, base_url: request.base_url, random_order: @random_order) %>
   </div>
 </div>

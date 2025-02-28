@@ -14,7 +14,7 @@
     path_info: request.fullpath, 
     user: @user, 
     pages: [
-      (@logged_in ? ['Posts', '/posts/random'] : nil),
+      (@logged_in ? ['Posts', '/posts'] : nil),
       ['Home', '/'],
       ['About', '/about'],
       ['Ads', '/ads']

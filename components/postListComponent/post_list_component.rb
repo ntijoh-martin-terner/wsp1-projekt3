@@ -4,13 +4,14 @@ require BASE_COMPONENT_PATH
 
 class PostListComponent < BaseComponent
   def initialize(posts: nil, user_id: nil, offset: 0, limit: 10, channel_ids: [], order_by: nil, search_query: nil,
-                 user_ids: nil, base_url: nil)
+                 user_ids: nil, base_url: nil, random_order: nil)
     super()
     @posts = posts
     @user_id = user_id
     @channel_ids = channel_ids
     @search_query = search_query
     @user_ids = user_ids
+    @random_order = random_order
     @limit = limit
     @order_by = order_by
     @next_offset = offset

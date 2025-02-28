@@ -1,7 +1,7 @@
 <% @posts.each_with_index  do |post, index| %>
   <div 
     <% if index == @posts.size - 1 %>
-      hx-get="/posts/more?offset=<%=@next_offset%>&search_query=<%=@search_query%>&order_by=<%=@order_by%>&limit=<%=@limit%><%= @channel_ids&.map { |id| "&channel_ids[]=#{id}" }&.join %><%= @user_ids&.map { |id| "&user_ids[]=#{id}" }&.join %>" 
+      hx-get="/posts/more?offset=<%=@next_offset%>&search_query=<%=@search_query%>&order_by=<%=@order_by%>&random_order=<%=@random_order%>&limit=<%=@limit%><%= @channel_ids&.map { |id| "&channel_ids[]=#{id}" }&.join %><%= @user_ids&.map { |id| "&user_ids[]=#{id}" }&.join %>" 
       hx-trigger="revealed" 
       hx-swap="afterend"
     <% end %>

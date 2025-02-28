@@ -7,12 +7,21 @@
         <label for="search-dropdown" class="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Search Posts</label>
         <div class="relative w-full">
             <input type="search" name="search" id="search-dropdown" value="<%=@search_query.nil? ? '' : @search_query%>" class="block p-2.5 w-full z-20 text-sm text-gray-900 bg-gray-50 rounded-e-lg border-s-gray-50 border-s-2 border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-s-gray-700  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:border-blue-500" placeholder="Search Posts, Users, Channels..." required />
-            <button type="submit" class="absolute top-0 end-0 p-2.5 text-sm font-medium h-full text-white bg-blue-700 rounded-e-lg border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-                <svg class="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
-                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
-                </svg>
-                <span class="sr-only">Search</span>
-            </button>
+            
+            <div class="absolute top-0 end-0 text-sm font-medium h-full text-white flex flex-row items-center gap-2"> 
+                <a href="<%= request.fullpath.split('?').first %>" class="">
+                    <svg class="w-6 h-6 text-gray-600 dark:text-gray-200" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14"/>
+                    </svg>
+                </a>
+
+                <button type="submit" class="top-0 end-0 p-2.5 bg-blue-700 rounded-e-lg border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                    <svg class="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
+                    </svg>
+                    <span class="sr-only">Search</span>
+                </button>
+            </div>
         </div>
     </div>
 </form>
@@ -20,7 +29,7 @@
 <div class="bg-white border-gray-200 dark:bg-gray-900 w-full flex flex-col items-center">
   <!-- Container for posts -->
   <div id="post-container" class="w-full max-w-2xl md:max-w-3xl flex flex-col gap-4 md:gap-6">
-    <%= PostListComponent(posts: @posts, user_id: @user_id, offset: @offset + @limit, limit: @limit, channel_ids: @channel_ids, search_query: @search_query, order_by: @order_by, base_url: request.base_url) %>
+    <%= PostListComponent(posts: @posts, user_id: @user_id, offset: @offset + @limit, limit: @limit, channel_ids: @channel_ids, search_query: @search_query, order_by: @order_by, base_url: request.base_url, random_order: @random_order) %>
   </div>
 </div>
 
