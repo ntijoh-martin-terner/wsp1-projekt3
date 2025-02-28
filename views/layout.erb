@@ -3,13 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="assets/application.css">
-    <script src="assets/flowbite.js"></script>
+    <link rel="stylesheet" href="/assets/application.css">
+    <script src="/assets/flowbite.js"></script>
     <title><%=PROJECT_NAME%></title>
 </head>
-<body>
+<body class="bg-white dark:bg-gray-900">
   <%# <%= Profile({username: 'oudend', mail: 'abc', user_profile_id: nil}, true) %>
-  <%=Navbar(path_info: request.fullpath, user: @user, pages: {'Home' => '/', 'About' => '/about', 'Ads' => '/ads'})%>
+  <%= Navbar(
+    path_info: request.fullpath, 
+    user: @user, 
+    pages: [
+      (@logged_in ? ['Posts', '/posts/random'] : nil),
+      ['Home', '/'],
+      ['About', '/about'],
+      ['Ads', '/ads']
+    ].compact.to_h
+  )%>
   <%= yield %>
   <%=Footer()%>
 </body>

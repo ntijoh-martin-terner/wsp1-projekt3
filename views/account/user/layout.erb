@@ -8,10 +8,29 @@
     <script src="/assets/post.js"></script>
     <title><%=PROJECT_NAME%> Account</title>
 </head>
-<body class="bg-white dark:bg-gray-900">
-  <%=Navbar(path_info: request.fullpath, user: @user, pages: {'Home' => '/', 'About' => '/about', 'Ads' => '/ads'})%>
-  <div class="w-full divide-y divide-gray-100 shadow dark:divide-gray-600 text-white text-center p-12"> 
-    <%=@account_user_name%>
+<body class="bg-white dark:bg-gray-900 min-h-screen flex flex-col">
+  <%= Navbar(
+    path_info: request.fullpath, 
+    user: @user, 
+    pages: [
+      (@logged_in ? ['Posts', '/posts/random'] : nil),
+      ['Home', '/'],
+      ['About', '/about'],
+      ['Ads', '/ads']
+    ].compact.to_h
+  )%>
+  <div class="max-w-6xl mx-auto bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden mb-12">
+    <!-- Channel Header -->
+    <div class="p-6 border-b border-gray-200 dark:border-gray-700 ">
+      <h1 class="text-2xl font-bold text-gray-900 dark:text-white"><%=@account_user_name%></h1>
+      <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
+        <% begin %>
+          Created on: <%= Time.parse(@created_at).strftime('%B %d, %Y') %>
+        <% rescue ArgumentError %>
+          Created on: Invalid date format
+        <% end %>
+      </p>
+    </div>
   </div>
   <%= yield %>
   <%=Footer()%>

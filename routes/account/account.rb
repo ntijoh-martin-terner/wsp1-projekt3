@@ -14,6 +14,7 @@ class Account < App
     @user_id = user_id.to_i
     @path_info = request.fullpath
     @account_user_name = @account_user['username']
+    @created_at = @account_user['created_at']
 
     redirect "account/#{user_id}/posts" if session[:user_id] != user_id.to_i
 
@@ -25,10 +26,6 @@ class Account < App
     redirect "/account/#{user_id}/posts/random"
   end
 
-  get '/:user_id' do |user_id|
-    redirect "/account/#{user_id}/posts/random"
-  end
-
   get '/:user_id/posts/?*' do |user_id, sorting|
     @account_user = UserModel.find_by_id(id: user_id.to_i)
     halt 404 unless @account_user # Handle user not found
@@ -37,6 +34,7 @@ class Account < App
     @account_user_name = @account_user['username']
     @user_id = user_id.to_i
     @current_account = session[:user_id].to_i == @user_id
+    @created_at = @account_user['created_at']
 
     @limit = 10
     @offset = 0
@@ -91,5 +89,9 @@ class Account < App
 
     session[:user_id] = matching_user['id']
     redirect '/posts/home'
+  end
+
+  get '/:user_id' do |user_id|
+    redirect "/account/#{user_id}/posts/random"
   end
 end

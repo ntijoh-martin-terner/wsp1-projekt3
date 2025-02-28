@@ -4,6 +4,7 @@ require APP_PATH
 require File.join(DATABASE_PATH, '/models/post.rb')
 require File.join(DATABASE_PATH, '/models/comment.rb')
 require File.join(DATABASE_PATH, '/models/vote.rb')
+require File.join(DATABASE_PATH, '/models/media.rb')
 require 'digest'
 
 class Post < App
@@ -23,6 +24,39 @@ class Post < App
     @grouped_comments = @comments.group_by { |comment| comment['parent_comment_id'] }
 
     erb :"posts/post"
+  end
+
+  post '/new' do
+    user_id = session[:user_id]
+    halt 403, 'Unauthorized' unless user_id
+
+    title = params[:title].strip
+    content = params[:content].strip
+    channel_name = params[:channel].strip
+    images = params[:images]
+
+    halt 400, 'Invalid input' if title.empty? || content.empty? || channel_name.empty?
+    halt 400, 'Title too long' if title.length > 30
+    halt 400, 'Content too long' if content.length > 2000
+
+    channel = ChannelModel.get_channel_from_name(channel_name: channel_name)
+    halt 400, 'Channel does not exist' unless channel
+
+    post_id = PostModel.insert(
+      user_id: user_id,
+      channel_id: channel['id'],
+      title: title,
+      content: content
+    )
+
+    if images
+      images = [images] unless images.is_a?(Array) # Ensure it's an array
+      images.first(10).each do |image|
+        MediaModel.add_media(post_id: post_id, file: image, upload_dir: 'public/uploads')
+      end
+    end
+
+    redirect "/post/#{post_id}"
   end
 
   post '/:post_id/comment' do |post_id|

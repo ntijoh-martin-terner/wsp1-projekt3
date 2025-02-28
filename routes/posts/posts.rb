@@ -31,7 +31,14 @@ class Posts < App
                 when 'new' then 'post.created_at DESC'
                 when 'hot' then 'upvotes DESC'
                 when 'controversial' then 'downvotes DESC'
+                when 'random' then nil
+                else halt 404
                 end
+
+    @search_query = params[:search] || nil
+
+    p @search_query
+    p 'SEARCH QUEEERY'
 
     @random_order = true if sorting == 'random'
 
@@ -43,6 +50,7 @@ class Posts < App
       limit: @limit,
       order_by: @order_by,
       random_order: @random_order,
+      search_query: @search_query,
       seed: @seed
     )
 
