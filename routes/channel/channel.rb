@@ -2,6 +2,10 @@ require APP_PATH
 
 require File.join(DATABASE_PATH, '/models/channel/channel.rb')
 require File.join(DATABASE_PATH, '/models/user.rb')
+require File.join(DATABASE_PATH, '/models/channel/role_permission.rb')
+require File.join(DATABASE_PATH, '/models/channel/permission.rb')
+require File.join(DATABASE_PATH, '/models/channel/channel_role.rb')
+require File.join(DATABASE_PATH, '/models/channel/channel_membership.rb')
 
 class Channel < App
   get '/:channel_id' do |channel_id|
@@ -81,5 +85,38 @@ class Channel < App
     )
 
     erb :"posts/channel"
+  end
+
+  post '/new' do
+    title = params[:title]
+    description = params[:description]
+
+    # Seed groups
+    channel_id = ChannelModel.insert(name: title, description: description)
+
+    # Seed group-specific roles
+    owner_role_id = ChannelRoleModel.insert(channel_id: channel_id, name: 'Owner')
+    moderator_role_id = ChannelRoleModel.insert(channel_id: channel_id, name: 'Moderator')
+    member_role_id = ChannelRoleModel.insert(channel_id: channel_id, name: 'Member')
+
+    # Assign permissions to roles
+    RolePermissionModel.insert(channel_role_id: owner_role_id,
+                               permission_id: PermissionModel.find_id_by_name(name: 'delete_post'))
+    RolePermissionModel.insert(channel_role_id: owner_role_id,
+                               permission_id: PermissionModel.find_id_by_name(name: 'ban_user'))
+    RolePermissionModel.insert(channel_role_id: owner_role_id,
+                               permission_id: PermissionModel.find_id_by_name(name: 'admin'))
+    RolePermissionModel.insert(channel_role_id: moderator_role_id,
+                               permission_id: PermissionModel.find_id_by_name(name: 'delete_post'))
+
+    user_id = session[:user_id]
+
+    # Assign users to groups with roles
+    ChannelMembershipModel.insert(user_id: user_id, channel_id: channel_id, channel_role_id: owner_role_id) # John is Owner
+
+    # Save the channel to the database
+    # db.execute('INSERT INTO channels (title, description) VALUES (?, ?)', [title, description])
+
+    redirect "/channel/#{channel_id}"
   end
 end

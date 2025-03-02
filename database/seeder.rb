@@ -40,8 +40,7 @@ ChannelMembershipModel.create
 # Seed permissions (global)
 PermissionModel.insert(name: 'delete_post')
 PermissionModel.insert(name: 'ban_user')
-PermissionModel.insert(name: 'edit_group_details')
-PermissionModel.insert(name: 'approve_post')
+PermissionModel.insert(name: 'admin')
 
 # Seed groups
 channel_id = ChannelModel.insert(name: 'Ruby Enthusiasts', description: 'A group for Ruby developers')
@@ -57,7 +56,7 @@ RolePermissionModel.insert(channel_role_id: owner_role_id,
 RolePermissionModel.insert(channel_role_id: owner_role_id,
                            permission_id: PermissionModel.find_id_by_name(name: 'ban_user'))
 RolePermissionModel.insert(channel_role_id: moderator_role_id,
-                           permission_id: PermissionModel.find_id_by_name(name: 'approve_post'))
+                           permission_id: PermissionModel.find_id_by_name(name: 'delete_post'))
 
 # Seed users
 user1_id = UserModel.insert(username: 'john', password_hash: UserModel.hash_password('secretPassword'),

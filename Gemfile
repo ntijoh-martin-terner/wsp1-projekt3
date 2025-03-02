@@ -33,3 +33,9 @@ gem 'puma'
 gem 'dotenv', '~> 3.1'
 
 gem "rqrcode", "~> 2.2"
+
+gem "sanitize", "~> 7.0"
+
+gem "rack-attack", "~> 6.7"
+
+gem "activesupport", "~> 8.0"

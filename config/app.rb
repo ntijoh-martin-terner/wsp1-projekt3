@@ -4,9 +4,31 @@ require 'sinatra/base'
 require 'sinatra/url_for'
 require 'better_errors'
 require 'rdiscount'
-require_relative '../lib/asset_bundler'
 require 'erb'
 require 'dotenv/load'
+require_relative '../lib/asset_bundler'
+require_relative '../lib/middleware/input_sanitizer'
+
+def sanitize_params!(params)
+  # p params
+  # p 'sanitizing  ^^^'
+
+  params.each do |key, value|
+    if value.is_a?(String)
+      params[key] = Sanitize.fragment(value)
+    elsif value.is_a?(Hash)
+      sanitize_params!(value)
+    elsif value.is_a?(Array)
+      value.each_with_index do |item, index|
+        if item.is_a?(String)
+          value[index] = Sanitize.fragment(item)
+        elsif item.is_a?(Hash)
+          sanitize_params!(item)
+        end
+      end
+    end
+  end
+end
 
 class App < Sinatra::Base
   configure do
@@ -16,11 +38,15 @@ class App < Sinatra::Base
     set :public_folder, PUBLIC_PATH
     set :asset_bundler, AssetBundler.new
     enable :sessions
+    # use InputSanitizer
     set :session_secret, ENV['SESSION_SECRET'] # Change this to a secure secret
 
     # JavaScript group
     settings.asset_bundler.add_js(:flowbite, paths: [
                                     [File.join(APP_ROOT, 'node_modules/flowbite/dist/flowbite.min.js'), false]
+                                  ])
+    settings.asset_bundler.add_js(:flowbite_module, paths: [
+                                    [File.join(APP_ROOT, 'node_modules/flowbite/dist/flowbite.esm.js'), false]
                                   ])
     settings.asset_bundler.add_js(:htmx, paths: [
                                     [File.join(APP_ROOT, 'assets/js/htmx.min.js'), false]
@@ -29,7 +55,11 @@ class App < Sinatra::Base
                                     [File.join(APP_ROOT, 'assets/js/htmx.min.js'), false],
                                     [File.join(APP_ROOT, 'node_modules/flowbite/dist/flowbite.min.js'), false],
                                     [File.join(APP_ROOT, 'assets/js/voteComponent.js'), true],
+                                    [File.join(APP_ROOT, 'assets/js/postMisc.js'), true],
                                     [File.join(APP_ROOT, 'assets/js/share.js'), true]
+                                  ])
+    settings.asset_bundler.add_js(:post_modules, paths: [
+                                    [File.join(APP_ROOT, 'assets/js/shareModule.js'), true]
                                   ])
 
     # CSS group
@@ -45,6 +75,7 @@ class App < Sinatra::Base
   before do
     @logged_in = !session[:user_id].nil?
     @user = UserModel.find_by_id(id: session[:user_id]) if @logged_in
+    sanitize_params!(params) unless params.empty?
   end
 
   # Serve JavaScript bundles dynamically

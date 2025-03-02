@@ -44,47 +44,57 @@
 <!-- Modal -->
 <div id="post-modal" tabindex="-1" class="hidden fixed inset-0 z-50 flex items-center justify-center w-full h-full bg-gray-900 bg-opacity-50">
     <div class="relative w-full max-w-2xl bg-white rounded-lg shadow-lg dark:bg-gray-800">
-        <!-- Modal header -->
-        <div class="flex items-center justify-between p-4 border-b dark:border-gray-700">
-            <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Create a Post</h3>
-            <button type="button" class="text-gray-400 hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 flex items-center justify-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="post-modal">
-                <span class="sr-only">Close modal</span>
-                &times;
-            </button>
+        <!-- Tabs -->
+        <div class="flex border-b dark:border-gray-700">
+            <button class="tab-link px-4 py-2 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500" data-tab="post-tab">Create Post</button>
+            <button class="tab-link px-4 py-2 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500" data-tab="channel-tab">Create Channel</button>
         </div>
 
         <!-- Modal body -->
-        <form id="post-form" action="/post/new" method="POST" enctype="multipart/form-data" class="p-4 space-y-4">
-            <!-- Title -->
-            <div>
-                <label for="title" class="block text-sm font-medium text-gray-900 dark:text-white">Title (Max 30 characters)</label>
-                <input type="text" id="title" name="title" maxlength="30" required class="block w-full p-2.5 border rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white">
-            </div>
+        <div class="p-4">
+            <!-- Post Form -->
+            <form id="post-tab" action="/post/new" method="POST" enctype="multipart/form-data" class="tab-content space-y-4">
+                <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Create a Post</h3>
 
-            <!-- Channel selection -->
-            <div>
-                <label for="channel" class="block text-sm font-medium text-gray-900 dark:text-white">Channel</label>
-                <input type="text" id="channel-input" name="channel" placeholder="Search for a channel..." required class="block w-full p-2.5 border rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white">
-                <ul id="channel-suggestions" class="mt-2 bg-white border rounded-md dark:bg-gray-700 dark:border-gray-600 hidden"></ul>
-            </div>
+                <div>
+                    <label for="title" class="block text-sm font-medium text-gray-900 dark:text-white">Title (Max 30 characters)</label>
+                    <input type="text" id="title" name="title" maxlength="30" required class="block w-full p-2.5 border rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                </div>
 
-            <!-- Content -->
-            <div>
-                <label for="content" class="block text-sm font-medium text-gray-900 dark:text-white">Content (Max 2000 characters)</label>
-                <textarea id="content" name="content" rows="4" maxlength="2000" required class="block w-full p-2.5 border rounded-lg resize-y dark:bg-gray-700 dark:border-gray-600 dark:text-white"></textarea>
-            </div>
+                <div>
+                    <label for="channel" class="block text-sm font-medium text-gray-900 dark:text-white">Channel</label>
+                    <input type="text" id="channel-input" name="channel" placeholder="Search for a channel..." required class="block w-full p-2.5 border rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                    <ul id="channel-suggestions" class="mt-2 bg-white border rounded-md dark:bg-gray-700 dark:border-gray-600 hidden"></ul>
+                </div>
 
-            <!-- Image Upload -->
-            <div>
-                <label class="block text-sm font-medium text-gray-900 dark:text-white">Upload Images (Max 10)</label>
-                <input type="file" id="images" name="images[]" multiple accept="image/*" class="block w-full p-2.5 border rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white">
-                <small class="text-gray-500 dark:text-gray-400">You can upload up to 10 images.</small>
-            </div>
+                <div>
+                    <label for="content" class="block text-sm font-medium text-gray-900 dark:text-white">Content (Max 2000 characters)</label>
+                    <textarea id="content" name="content" rows="4" maxlength="2000" required class="block w-full p-2.5 border rounded-lg resize-y dark:bg-gray-700 dark:border-gray-600 dark:text-white"></textarea>
+                </div>
 
-            <!-- Submit Button -->
-            <div class="flex justify-end">
-                <button type="submit" class="px-5 py-2.5 text-white bg-blue-600 rounded-lg hover:bg-blue-700">Post</button>
-            </div>
-        </form>
+                <div class="flex justify-end">
+                    <button type="submit" class="px-5 py-2.5 text-white bg-blue-600 rounded-lg hover:bg-blue-700">Post</button>
+                </div>
+            </form>
+
+            <!-- Channel Form -->
+            <form id="channel-tab" action="/channel/new" method="POST" class="tab-content hidden space-y-4">
+                <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Create a Channel</h3>
+
+                <div>
+                    <label for="channel-title" class="block text-sm font-medium text-gray-900 dark:text-white">Channel Title</label>
+                    <input type="text" id="channel-title" name="title" maxlength="50" required class="block w-full p-2.5 border rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                </div>
+
+                <div>
+                    <label for="channel-description" class="block text-sm font-medium text-gray-900 dark:text-white">Description</label>
+                    <textarea id="channel-description" name="description" rows="3" maxlength="500" required class="block w-full p-2.5 border rounded-lg resize-y dark:bg-gray-700 dark:border-gray-600 dark:text-white"></textarea>
+                </div>
+
+                <div class="flex justify-end">
+                    <button type="submit" class="px-5 py-2.5 text-white bg-green-600 rounded-lg hover:bg-green-700">Create Channel</button>
+                </div>
+            </form>
+        </div>
     </div>
 </div>

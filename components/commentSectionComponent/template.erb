@@ -16,7 +16,7 @@
       <button 
         type="button"
         hx-target="next .child-comments"
-        onclick="this.nextElementSibling.classList.toggle('hidden'); this.innerText = this.nextElementSibling.classList.contains('hidden') ? 'Show Replies' : 'Hide Replies';"
+        onclick="this.parentElement.nextElementSibling.classList.toggle('hidden'); this.innerText = this.parentElement.nextElementSibling.classList.contains('hidden') ? 'Show Replies' : 'Hide Replies';"
         class="mt-2 px-3 py-1 text-sm font-medium text-blue-600 dark:text-blue-400 hover:underline transition">
         Hide Replies
       </button>
