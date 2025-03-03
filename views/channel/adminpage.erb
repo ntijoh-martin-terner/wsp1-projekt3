@@ -1,0 +1,89 @@
+<div class="container mx-auto p-6 text-white bg-gray-900">
+  <h2 class="text-2xl font-bold mb-4">Manage Roles & Permissions</h2>
+
+  <table class="table-auto w-full border-collapse border border-gray-700">
+    <thead>
+      <tr class="bg-gray-800">
+        <th class="p-2 border">Role</th>
+        <% @permissions.each do |perm| %>
+          <th class="p-2 border"><%= perm["name"] %></th>
+        <% end %>
+        <th class="p-2 border">Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @roles.map { |r| r["role_name"] }.uniq.each do |role_name| %>
+        <% role_permissions = @roles.select { |r| r["role_name"] == role_name }.map { |r| r["permission_name"] }.compact %>
+
+        <tr class="border">
+          <td class="p-2 border font-semibold"><%= role_name %></td>
+
+          <% @permissions.each do |perm| %>
+            <% has_permission = role_permissions.include?(perm["name"]) %>
+            <td class="p-2 border text-center">
+              <form action="/channel/<%= @channel['id'] %>/update_role_permissions" method="post">
+                <input type="hidden" name="role_name" value="<%= role_name %>">
+                <input type="hidden" name="permission" value="<%= perm['name'] %>">
+                <input type="checkbox" name="add" value="true" onchange="this.form.submit()" <%= "checked" if has_permission %>>
+              </form>
+            </td>
+          <% end %>
+
+          <td class="p-2 border text-center">
+            <form action="/channel/<%= @channel['id'] %>/remove_role" method="post">
+              <input type="hidden" name="role_name" value="<%= role_name %>">
+              <button type="submit" class="bg-red-600 text-white px-4 py-2 rounded">Remove</button>
+            </form>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+
+
+
+  <h3 class="text-xl font-bold mt-6">Users with Roles</h3>
+  <table class="table-auto w-full border-collapse border border-gray-700 mt-2">
+    <thead>
+      <tr class="bg-gray-800">
+        <th class="p-2 border">User ID</th>
+        <th class="p-2 border">Username</th>
+        <th class="p-2 border">Role</th>
+        <th class="p-2 border">Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @users_with_roles.each do |user| %>
+        <tr class="border">
+          <td class="p-2 border"><%= user['user_id'] %></td>
+          <td class="p-2 border"><%= user['username'] %></td>
+          <td class="p-2 border"><%= user['role_name'] %></td>
+          <td class="p-2 border text-center">
+            <form action="/channel/<%=@channel['id']%>/remove_user_role" method="post">
+              <input type="hidden" name="user_id" value="<%= user['user_id'] %>">
+              <input type="hidden" name="role_id" value="<%= user['role_id'] %>">
+              <button type="submit" class="bg-red-500 text-white px-3 py-1 rounded">Remove</button>
+            </form>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+
+  <h3 class="text-xl font-bold mt-6">Create New Role</h3>
+  <form action="/channel/<%=@channel['id']%>/create_role" method="post" class="mt-4 flex gap-2">
+    <input type="text" name="role_name" placeholder="New Role Name" required class="p-2 border rounded w-full bg-gray-800 text-white">
+    <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">Create</button>
+  </form>
+
+  <h3 class="text-xl font-bold mt-6">Add User to Role</h3>
+  <form action="/channel/<%=@channel['id']%>/add_user_role" method="post" class="mt-4 flex gap-2">
+    <input type="text" name="username" placeholder="Username" required class="p-2 border rounded text-black">
+    <select name="role_id" class="p-2 border rounded text-black">
+      <% @roles.uniq { |r| r["role_id"] }.each do |role| %>
+        <option value="<%= role['role_id'] %>"><%= role['role_name'] %></option>
+      <% end %>
+    </select>
+    <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">Add</button>
+  </form>
+</div>

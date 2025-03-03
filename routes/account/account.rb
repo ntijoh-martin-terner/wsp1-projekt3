@@ -8,7 +8,19 @@ require File.join(DATABASE_PATH, '/models/user.rb')
 
 # %r{/(home)?}
 
+#
+# Account routes
+#
 class Account < App
+  #
+  # GET /:user_id/settings
+  #
+  # Displays the settings page for a user.
+  #
+  # @param user_id [String] the ID of the user (as a path variable)
+  # @return [String] the rendered ERB template for the account user settings page
+  # @example
+  #   GET /123/settings
   get '/:user_id/settings' do |user_id|
     @account_user = UserModel.find_by_id(id: user_id.to_i)
     @user_id = user_id.to_i
@@ -21,11 +33,29 @@ class Account < App
     erb :"account/user/settings"
   end
 
-  # Redirect /:user_id/posts to /:user_id/posts/new
+  #
+  # GET /:user_id/posts
+  #
+  # Redirects the user to the random posts route.
+  #
+  # @param user_id [String] the ID of the user (as a path variable)
+  # @return [Array] a Rack redirection response to /account/:user_id/posts/random
+  # @example
+  #   GET /123/posts
   get '/:user_id/posts' do |user_id|
     redirect "/account/#{user_id}/posts/random"
   end
 
+  #
+  # GET /:user_id/posts/?*
+  #
+  # Retrieves and displays posts for the specified user with sorting.
+  #
+  # @param user_id [String] the ID of the user (as a path variable)
+  # @param sorting [String] the sorting parameter ('new', 'hot', 'controversial', 'random')
+  # @return [String] the rendered ERB template for the account user posts page
+  # @example
+  #   GET /123/posts/new
   get '/:user_id/posts/?*' do |user_id, sorting|
     @account_user = UserModel.find_by_id(id: user_id.to_i)
     halt 404 unless @account_user # Handle user not found

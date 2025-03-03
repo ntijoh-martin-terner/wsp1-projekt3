@@ -14,20 +14,27 @@ require_relative './models/comment'
 require_relative './models/media'
 
 # Drop tables in reverse dependency order
+
+@db = SQLite3::Database.new(DATABASE_FILE_PATH)
+@db.results_as_hash = true
+@db.execute('PRAGMA foreign_keys = OFF')
+
+CommentModel.drop
+UserModel.drop
 ChannelMembershipModel.drop
 RolePermissionModel.drop
 ChannelRoleModel.drop
 PermissionModel.drop
-CommentModel.drop
-PostModel.drop
 VoteModel.drop
+PostModel.drop
 ChannelModel.drop
-ChannelModel.create
-UserModel.drop
 MediaModel.drop
-MediaModel.create
+
+@db.execute('PRAGMA foreign_keys = ON')
 
 # Create tables
+ChannelModel.create
+MediaModel.create
 UserModel.create
 PostModel.create
 CommentModel.create
@@ -38,9 +45,10 @@ RolePermissionModel.create
 ChannelMembershipModel.create
 
 # Seed permissions (global)
-PermissionModel.insert(name: 'delete_post')
-PermissionModel.insert(name: 'ban_user')
-PermissionModel.insert(name: 'admin')
+PermissionModel.insert(name: 'delete_post', removeable: 1)
+PermissionModel.insert(name: 'ban_user', removeable: 1)
+PermissionModel.insert(name: 'adminpage', removeable: 1)
+PermissionModel.insert(name: 'owner', removeable: 0)
 
 # Seed groups
 channel_id = ChannelModel.insert(name: 'Ruby Enthusiasts', description: 'A group for Ruby developers')

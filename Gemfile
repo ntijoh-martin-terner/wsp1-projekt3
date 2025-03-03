@@ -39,3 +39,5 @@ gem "sanitize", "~> 7.0"
 gem "rack-attack", "~> 6.7"
 
 gem "activesupport", "~> 8.0"
+
+gem "yard", "~> 0.9.37"

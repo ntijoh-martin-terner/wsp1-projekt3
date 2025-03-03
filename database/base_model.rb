@@ -14,7 +14,7 @@ class BaseModel
 
     @db = SQLite3::Database.new(DATABASE_FILE_PATH)
     @db.results_as_hash = true
-    @db.execute('PRAGMA foreign_keys = ON')
+    # @db.execute('PRAGMA foreign_keys = ON')
 
     @db
   end

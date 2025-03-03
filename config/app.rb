@@ -7,7 +7,7 @@ require 'rdiscount'
 require 'erb'
 require 'dotenv/load'
 require_relative '../lib/asset_bundler'
-require_relative '../lib/middleware/input_sanitizer'
+# require_relative '../lib/middleware/input_sanitizer'
 
 def sanitize_params!(params)
   # p params
