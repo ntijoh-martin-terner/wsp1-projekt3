@@ -46,7 +46,7 @@ ChannelMembershipModel.create
 
 # Seed permissions (global)
 PermissionModel.insert(name: 'delete_post', removeable: 1)
-PermissionModel.insert(name: 'ban_user', removeable: 1)
+# PermissionModel.insert(name: 'ban_user', removeable: 1)
 PermissionModel.insert(name: 'adminpage', removeable: 1)
 PermissionModel.insert(name: 'owner', removeable: 0)
 

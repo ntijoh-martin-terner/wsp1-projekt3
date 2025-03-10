@@ -22,6 +22,17 @@
         <%= @post['title'] %>
       </h5>
     </a>
+
+    <% if @can_delete_post %>
+      <form action="/post/<%= @post['id'] %>/delete" method="post" class="inline-block">
+        <button type="submit" class="text-red-500 hover:text-red-700">
+          <svg class="w-6 h-6" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M3 6h18M8 6v12m4-12v12m4-12v12M5 6h14l-1 14H6L5 6zm5-3h4v2h-4V3z"/>
+          </svg>
+        </button>
+      </form>
+    <% end %>
+
   </div>
 
   <!-- Post Content -->

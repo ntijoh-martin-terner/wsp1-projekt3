@@ -7,6 +7,12 @@ class PostModel < BaseModel
     @table_name ||= 'post'
   end
 
+  def self.delete_post(post_id: nil)
+    db.execute(<<-SQL, [post_id])
+      DELETE FROM post WHERE id = ?
+    SQL
+  end
+
   def self.retrieve_posts(seed: nil, offset: 0, limit: 100, channel_ids: nil, user_ids: nil, order_by: nil, random_order: false, search_query: nil)
     sql = <<-SQL
       SELECT

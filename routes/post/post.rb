@@ -5,6 +5,7 @@ require File.join(DATABASE_PATH, '/models/post.rb')
 require File.join(DATABASE_PATH, '/models/comment.rb')
 require File.join(DATABASE_PATH, '/models/vote.rb')
 require File.join(DATABASE_PATH, '/models/media.rb')
+require File.join(DATABASE_PATH, '/models/channel/channel_membership.rb')
 require 'digest'
 
 class Post < App
@@ -24,6 +25,23 @@ class Post < App
     @grouped_comments = @comments.group_by { |comment| comment['parent_comment_id'] }
 
     erb :"posts/post"
+  end
+
+  post '/:post_id/delete' do |post_id|
+    user_id = session[:user_id]
+    halt 403, 'Unauthorized' unless user_id
+
+    post = PostModel.get_post_from_id(post_id)
+
+    permissions = ChannelMembershipModel.permissions_for(user_id: session['user_id'], channel_id: post['channel_id'])
+
+    can_delete_post = permissions.any? { |perm| perm['name'] == 'delete_post' } || post['user_id'] == user_id
+
+    halt 403, 'Unauthorized' unless can_delete_post
+
+    PostModel.delete_post(post_id: post_id)
+
+    redirect back
   end
 
   post '/new' do

@@ -3,6 +3,7 @@
 require BASE_COMPONENT_PATH
 require File.join(DATABASE_PATH, '/models/comment.rb')
 require File.join(DATABASE_PATH, '/models/vote.rb')
+require File.join(DATABASE_PATH, '/models/channel/channel_membership.rb')
 
 class PostComponent < BaseComponent
   def truncate(text, length: 100, omission: '...')
@@ -29,6 +30,8 @@ class PostComponent < BaseComponent
     # to do: get a @upvotes variable(also rename to upvote_count)
     @post = post
     @base_url = base_url
+    permissions = ChannelMembershipModel.permissions_for(user_id: user_id, channel_id: post['channel_id'])
+    @can_delete_post = permissions.any? { |perm| perm['name'] == 'delete_post' } || post['user_id'] == user_id
     @comment_count = CommentModel.comment_count(post_id: post['id'])
     @upvote_count = VoteModel.upvote_count(post_id: post['id'])
     @downvote_count = VoteModel.downvote_count(post_id: post['id'])
