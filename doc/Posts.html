@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>
+  Class: Posts
+  
+    &mdash; Documentation by YARD 0.9.37
+  
+</title>
+
+  <link rel="stylesheet" href="css/style.css" type="text/css" />
+
+  <link rel="stylesheet" href="css/common.css" type="text/css" />
+
+<script type="text/javascript">
+  pathId = "Posts";
+  relpath = '';
+</script>
+
+
+  <script type="text/javascript" charset="utf-8" src="js/jquery.js"></script>
+
+  <script type="text/javascript" charset="utf-8" src="js/app.js"></script>
+
+
+  </head>
+  <body>
+    <div class="nav_wrap">
+      <iframe id="nav" src="class_list.html?1"></iframe>
+      <div id="resizer"></div>
+    </div>
+
+    <div id="main" tabindex="-1">
+      <div id="header">
+        <div id="menu">
+  
+    <a href="_index.html">Index (P)</a> &raquo;
+    
+    
+    <span class="title">Posts</span>
+  
+</div>
+
+        <div id="search">
+  
+    <a class="full_list_link" id="class_list_link"
+        href="class_list.html">
+
+        <svg width="24" height="24">
+          <rect x="0" y="4" width="24" height="4" rx="1" ry="1"></rect>
+          <rect x="0" y="12" width="24" height="4" rx="1" ry="1"></rect>
+          <rect x="0" y="20" width="24" height="4" rx="1" ry="1"></rect>
+        </svg>
+    </a>
+  
+</div>
+        <div class="clear"></div>
+      </div>
+
+      <div id="content"><h1>Class: Posts
+  
+  
+  
+</h1>
+<div class="box_info">
+  
+  <dl>
+    <dt>Inherits:</dt>
+    <dd>
+      <span class="inheritName">App</span>
+      
+        <ul class="fullTree">
+          <li>Object</li>
+          
+            <li class="next">App</li>
+          
+            <li class="next">Posts</li>
+          
+        </ul>
+        <a href="#" class="inheritanceTree">show all</a>
+      
+    </dd>
+  </dl>
+  
+
+  
+  
+  
+  
+  
+
+  
+
+  
+  <dl>
+    <dt>Defined in:</dt>
+    <dd>routes/posts/posts.rb</dd>
+  </dl>
+  
+</div>
+
+<h2>Overview</h2><div class="docstring">
+  <div class="discussion">
+    
+<p>Posts routes</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div>
+
+
+
+
+
+
+  
+    <h2>
+      Instance Method Summary
+      <small><a href="#" class="summary_toggle">collapse</a></small>
+    </h2>
+
+    <ul class="summary">
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#GET____-instance_route" title="#GET &#39;/&#39; (instance route)">#<strong>GET &#39;/&#39;</strong>  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>GET /.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#GET___home_-instance_route" title="#GET &#39;/home&#39; (instance route)">#<strong>GET &#39;/home&#39;</strong>  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>GET /home.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#GET___more_-instance_route" title="#GET &#39;/more&#39; (instance route)">#<strong>GET &#39;/more&#39;</strong>  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#GET__r___new_hot_controversial_random__-instance_route" title="#GET %r{/(new|hot|controversial|random)} (instance route)">#<strong>GET %r{/(new|hot|controversial|random)}</strong>  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>GET /:sorting.</p>
+</div></span>
+  
+</li>
+
+      
+    </ul>
+  
+
+
+  
+
+  <div id="instance_method_details" class="method_details_list">
+    <h2>Instance Method Details</h2>
+
+    
+      <div class="method_details first">
+  <h3 class="signature first" id="GET____-instance_route">
+  
+    #<strong>GET &#39;/&#39;</strong>  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>GET /</p>
+
+<p>Retrieves a list of posts based on sorting and search criteria. Redirects to /posts/random if no parameters are provided.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+  <div class="examples">
+    <h4 class="tag_title">Examples:</h4>
+    
+      
+      <pre class="example code"><code>GET /posts/?order_by=upvotes DESC&amp;search=example</code></pre>
+    
+  </div>
+
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'routes/posts/posts.rb', line 91</span>
+
+<span class='id identifier rubyid_get'>get</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>/</span><span class='tstring_end'>&#39;</span></span> <span class='kw'>do</span>
+  <span class='id identifier rubyid_redirect'>redirect</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>/posts/random</span><span class='tstring_end'>&#39;</span></span> <span class='kw'>if</span> <span class='id identifier rubyid_params'>params</span><span class='period'>.</span><span class='id identifier rubyid_nil?'>nil?</span>
+
+  <span class='comment'># @order_by = case params[:sort]
+</span>  <span class='comment'>#             when &#39;recent&#39; then &#39;post.created_at DESC&#39;
+</span>  <span class='comment'>#             when &#39;old&#39; then &#39;post.created_at ASC&#39;
+</span>  <span class='comment'>#             when &#39;upvotes&#39; then &#39;upvotes DESC&#39;
+</span>  <span class='comment'>#             when &#39;votes&#39; then &#39;votes DESC&#39;
+</span>  <span class='comment'>#             when &#39;downvotes&#39; then &#39;downvotes DESC&#39;
+</span>  <span class='comment'>#             else &#39;post.created_at DESC&#39;
+</span>  <span class='comment'>#             end
+</span>
+  <span class='ivar'>@order_by</span> <span class='op'>=</span> <span class='id identifier rubyid_params'>params</span><span class='lbracket'>[</span><span class='symbol'>:order_by</span><span class='rbracket'>]</span> <span class='op'>||</span> <span class='kw'>nil</span>
+
+  <span class='id identifier rubyid_p'>p</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>order by:</span><span class='tstring_end'>&#39;</span></span>
+  <span class='id identifier rubyid_p'>p</span> <span class='ivar'>@order_by</span>
+
+  <span class='comment'># Handle search
+</span>  <span class='ivar'>@search_query</span> <span class='op'>=</span> <span class='id identifier rubyid_params'>params</span><span class='lbracket'>[</span><span class='symbol'>:search</span><span class='rbracket'>]</span> <span class='op'>||</span> <span class='kw'>nil</span>
+
+  <span class='ivar'>@random_order</span> <span class='op'>=</span> <span class='id identifier rubyid_params'>params</span><span class='lbracket'>[</span><span class='symbol'>:random_order</span><span class='rbracket'>]</span> <span class='op'>==</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>true</span><span class='tstring_end'>&#39;</span></span> <span class='op'>||</span> <span class='kw'>false</span>
+
+  <span class='comment'># p @search_query
+</span>  <span class='comment'># p &#39;??? *^^&#39;
+</span>
+  <span class='comment'># @path_info = request.fullpath
+</span>  <span class='ivar'>@limit</span> <span class='op'>=</span> <span class='int'>20</span>
+  <span class='ivar'>@offset</span> <span class='op'>=</span> <span class='int'>0</span>
+  <span class='comment'># @order = &#39;created_at_desc&#39;
+</span>  <span class='ivar'>@user_id</span> <span class='op'>=</span> <span class='id identifier rubyid_session'>session</span><span class='lbracket'>[</span><span class='symbol'>:user_id</span><span class='rbracket'>]</span>
+  <span class='ivar'>@channel_ids</span> <span class='op'>=</span> <span class='lbracket'>[</span><span class='rbracket'>]</span>
+  <span class='ivar'>@user_ids</span> <span class='op'>=</span> <span class='lbracket'>[</span><span class='rbracket'>]</span>
+  <span class='ivar'>@posts</span> <span class='op'>=</span> <span class='const'>PostModel</span><span class='period'>.</span><span class='id identifier rubyid_retrieve_posts'>retrieve_posts</span><span class='lparen'>(</span><span class='label'>offset:</span> <span class='ivar'>@offset</span><span class='comma'>,</span> <span class='label'>limit:</span> <span class='ivar'>@limit</span><span class='comma'>,</span> <span class='label'>channel_ids:</span> <span class='ivar'>@channel_ids</span><span class='comma'>,</span>
+                                    <span class='label'>search_query:</span> <span class='ivar'>@search_query</span><span class='comma'>,</span> <span class='label'>order_by:</span> <span class='ivar'>@order_by</span><span class='comma'>,</span>
+                                    <span class='label'>random_order:</span> <span class='ivar'>@random_order</span><span class='rparen'>)</span>
+
+  <span class='id identifier rubyid_erb'>erb</span> <span class='symbol'>:&#39;posts/posts&#39;</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="GET___home_-instance_route">
+  
+    #<strong>GET &#39;/home&#39;</strong>  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>GET /home</p>
+
+<p>Redirects to a random post listing.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+  <div class="examples">
+    <h4 class="tag_title">Examples:</h4>
+    
+      
+      <pre class="example code"><code>GET /posts/home</code></pre>
+    
+  </div>
+
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+28
+29
+30</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'routes/posts/posts.rb', line 28</span>
+
+<span class='id identifier rubyid_get'>get</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>/home</span><span class='tstring_end'>&#39;</span></span> <span class='kw'>do</span>
+  <span class='id identifier rubyid_redirect'>redirect</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>/posts/random</span><span class='tstring_end'>&#39;</span></span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="GET___more_-instance_route">
+  
+    #<strong>GET &#39;/more&#39;</strong>  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+130
+131
+132
+133
+134
+135
+136
+137
+138
+139
+140
+141
+142
+143
+144
+145
+146
+147
+148
+149
+150
+151
+152
+153
+154
+155
+156
+157
+158
+159
+160
+161
+162
+163
+164
+165
+166
+167
+168</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'routes/posts/posts.rb', line 130</span>
+
+<span class='id identifier rubyid_get'>get</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>/more</span><span class='tstring_end'>&#39;</span></span> <span class='kw'>do</span>
+  <span class='id identifier rubyid_offset'>offset</span> <span class='op'>=</span> <span class='id identifier rubyid_params'>params</span><span class='lbracket'>[</span><span class='symbol'>:offset</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_to_i'>to_i</span> <span class='op'>||</span> <span class='int'>0</span>
+  <span class='id identifier rubyid_limit'>limit</span> <span class='op'>=</span> <span class='id identifier rubyid_params'>params</span><span class='lbracket'>[</span><span class='symbol'>:limit</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_to_i'>to_i</span> <span class='op'>||</span> <span class='int'>10</span>
+  <span class='id identifier rubyid_order_by'>order_by</span> <span class='op'>=</span> <span class='id identifier rubyid_params'>params</span><span class='lbracket'>[</span><span class='symbol'>:order_by</span><span class='rbracket'>]</span> <span class='op'>||</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>post.created_at DESC</span><span class='tstring_end'>&#39;</span></span>
+  <span class='id identifier rubyid_search_query'>search_query</span> <span class='op'>=</span> <span class='id identifier rubyid_params'>params</span><span class='lbracket'>[</span><span class='symbol'>:search_query</span><span class='rbracket'>]</span> <span class='op'>||</span> <span class='kw'>nil</span>
+  <span class='id identifier rubyid_channel_ids'>channel_ids</span> <span class='op'>=</span> <span class='id identifier rubyid_params'>params</span><span class='lbracket'>[</span><span class='symbol'>:channel_ids</span><span class='rbracket'>]</span> <span class='op'>||</span> <span class='lbracket'>[</span><span class='rbracket'>]</span>
+  <span class='id identifier rubyid_user_ids'>user_ids</span> <span class='op'>=</span> <span class='id identifier rubyid_params'>params</span><span class='lbracket'>[</span><span class='symbol'>:user_ids</span><span class='rbracket'>]</span> <span class='op'>||</span> <span class='lbracket'>[</span><span class='rbracket'>]</span>
+  <span class='id identifier rubyid_random_order'>random_order</span> <span class='op'>=</span> <span class='id identifier rubyid_params'>params</span><span class='lbracket'>[</span><span class='symbol'>:random_order</span><span class='rbracket'>]</span> <span class='op'>==</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>true</span><span class='tstring_end'>&#39;</span></span> <span class='op'>||</span> <span class='kw'>false</span>
+
+  <span class='id identifier rubyid_p'>p</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>order by:</span><span class='tstring_end'>&#39;</span></span>
+  <span class='id identifier rubyid_p'>p</span> <span class='id identifier rubyid_order_by'>order_by</span>
+  <span class='id identifier rubyid_p'>p</span> <span class='id identifier rubyid_random_order'>random_order</span>
+
+  <span class='comment'># order = params[:order]
+</span>  <span class='comment'># order_by = case params[:sort]
+</span>  <span class='comment'>#            when &#39;recent&#39; then &#39;post.created_at DESC&#39;
+</span>  <span class='comment'>#            when &#39;old&#39; then &#39;post.created_at ASC&#39;
+</span>  <span class='comment'>#            when &#39;upvotes&#39; then &#39;upvotes DESC&#39;
+</span>  <span class='comment'>#            when &#39;votes&#39; then &#39;votes DESC&#39;
+</span>  <span class='comment'>#            when &#39;downvotes&#39; then &#39;downvotes DESC&#39;
+</span>  <span class='comment'>#            else &#39;post.created_at DESC&#39;
+</span>  <span class='comment'>#            end
+</span>  <span class='id identifier rubyid_posts'>posts</span> <span class='op'>=</span> <span class='const'>PostModel</span><span class='period'>.</span><span class='id identifier rubyid_retrieve_posts'>retrieve_posts</span><span class='lparen'>(</span><span class='label'>seed:</span> <span class='id identifier rubyid_daily_seed'><span class='object_link'><a href="top-level-namespace.html#daily_seed-instance_method" title="#daily_seed (method)">daily_seed</a></span></span><span class='comma'>,</span> <span class='label'>offset:</span> <span class='id identifier rubyid_offset'>offset</span><span class='comma'>,</span> <span class='label'>limit:</span> <span class='id identifier rubyid_limit'>limit</span><span class='comma'>,</span> <span class='label'>user_ids:</span> <span class='id identifier rubyid_user_ids'>user_ids</span><span class='comma'>,</span>
+                                   <span class='label'>channel_ids:</span> <span class='id identifier rubyid_channel_ids'>channel_ids</span><span class='comma'>,</span> <span class='label'>order_by:</span> <span class='id identifier rubyid_order_by'>order_by</span><span class='comma'>,</span>
+                                   <span class='label'>search_query:</span> <span class='id identifier rubyid_search_query'>search_query</span><span class='comma'>,</span> <span class='label'>random_order:</span> <span class='id identifier rubyid_random_order'>random_order</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_user_id'>user_id</span> <span class='op'>=</span> <span class='id identifier rubyid_session'>session</span><span class='lbracket'>[</span><span class='symbol'>:user_id</span><span class='rbracket'>]</span>
+
+  <span class='id identifier rubyid_next_offset'>next_offset</span> <span class='op'>=</span> <span class='id identifier rubyid_offset'>offset</span> <span class='op'>+</span> <span class='id identifier rubyid_limit'>limit</span>
+
+  <span class='kw'>if</span> <span class='id identifier rubyid_posts'>posts</span><span class='period'>.</span><span class='id identifier rubyid_empty?'>empty?</span>
+    <span class='id identifier rubyid_halt'>halt</span> <span class='int'>204</span> <span class='comment'># No Content
+</span>  <span class='kw'>end</span>
+
+  <span class='const'>PostListComponent</span><span class='lparen'>(</span><span class='label'>posts:</span> <span class='id identifier rubyid_posts'>posts</span><span class='comma'>,</span> <span class='label'>user_id:</span> <span class='id identifier rubyid_user_id'>user_id</span><span class='comma'>,</span> <span class='label'>offset:</span> <span class='id identifier rubyid_next_offset'>next_offset</span><span class='comma'>,</span> <span class='label'>limit:</span> <span class='id identifier rubyid_limit'>limit</span><span class='comma'>,</span> <span class='label'>channel_ids:</span> <span class='id identifier rubyid_channel_ids'>channel_ids</span><span class='comma'>,</span>
+                    <span class='label'>order_by:</span> <span class='id identifier rubyid_order_by'>order_by</span><span class='comma'>,</span> <span class='label'>search_query:</span> <span class='id identifier rubyid_search_query'>search_query</span><span class='comma'>,</span> <span class='label'>user_ids:</span> <span class='id identifier rubyid_user_ids'>user_ids</span><span class='comma'>,</span> <span class='label'>base_url:</span> <span class='id identifier rubyid_request'>request</span><span class='period'>.</span><span class='id identifier rubyid_base_url'>base_url</span><span class='comma'>,</span>
+                    <span class='label'>random_order:</span> <span class='id identifier rubyid_random_order'>random_order</span><span class='rparen'>)</span>
+
+  <span class='comment'># erb :&#39;posts/partials/post_list&#39;, layout: false, find_layout: false
+</span><span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="GET__r___new_hot_controversial_random__-instance_route">
+  
+    #<strong>GET %r{/(new|hot|controversial|random)}</strong>  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>GET /:sorting</p>
+
+<p>Retrieves posts sorted by different criteria.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+  <div class="examples">
+    <h4 class="tag_title">Examples:</h4>
+    
+      
+      <pre class="example code"><code>GET /posts/new?search=example</code></pre>
+    
+  </div>
+
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'routes/posts/posts.rb', line 42</span>
+
+<span class='id identifier rubyid_get'>get</span> <span class='tstring'><span class='regexp_beg'>%r{</span><span class='tstring_content'>/(new|hot|controversial|random)</span><span class='regexp_end'>}</span></span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_sorting'>sorting</span><span class='op'>|</span>
+  <span class='ivar'>@path_info</span> <span class='op'>=</span> <span class='id identifier rubyid_request'>request</span><span class='period'>.</span><span class='id identifier rubyid_fullpath'>fullpath</span>
+  <span class='ivar'>@user_id</span> <span class='op'>=</span> <span class='id identifier rubyid_session'>session</span><span class='lbracket'>[</span><span class='symbol'>:user_id</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_to_i'>to_i</span>
+
+  <span class='ivar'>@limit</span> <span class='op'>=</span> <span class='int'>10</span>
+  <span class='ivar'>@offset</span> <span class='op'>=</span> <span class='int'>0</span>
+
+  <span class='ivar'>@order_by</span> <span class='op'>=</span> <span class='kw'>case</span> <span class='id identifier rubyid_sorting'>sorting</span>
+              <span class='kw'>when</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>new</span><span class='tstring_end'>&#39;</span></span> <span class='kw'>then</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>post.created_at DESC</span><span class='tstring_end'>&#39;</span></span>
+              <span class='kw'>when</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>hot</span><span class='tstring_end'>&#39;</span></span> <span class='kw'>then</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>upvotes DESC</span><span class='tstring_end'>&#39;</span></span>
+              <span class='kw'>when</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>controversial</span><span class='tstring_end'>&#39;</span></span> <span class='kw'>then</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>downvotes DESC</span><span class='tstring_end'>&#39;</span></span>
+              <span class='kw'>when</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>random</span><span class='tstring_end'>&#39;</span></span> <span class='kw'>then</span> <span class='kw'>nil</span>
+              <span class='kw'>else</span> <span class='id identifier rubyid_halt'>halt</span> <span class='int'>404</span>
+              <span class='kw'>end</span>
+
+  <span class='ivar'>@search_query</span> <span class='op'>=</span> <span class='id identifier rubyid_params'>params</span><span class='lbracket'>[</span><span class='symbol'>:search</span><span class='rbracket'>]</span> <span class='op'>||</span> <span class='kw'>nil</span>
+
+  <span class='id identifier rubyid_p'>p</span> <span class='ivar'>@search_query</span>
+  <span class='id identifier rubyid_p'>p</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>SEARCH QUEEERY</span><span class='tstring_end'>&#39;</span></span>
+
+  <span class='ivar'>@random_order</span> <span class='op'>=</span> <span class='kw'>true</span> <span class='kw'>if</span> <span class='id identifier rubyid_sorting'>sorting</span> <span class='op'>==</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>random</span><span class='tstring_end'>&#39;</span></span>
+
+  <span class='comment'># Special handling for random sorting
+</span>  <span class='ivar'>@seed</span> <span class='op'>=</span> <span class='ivar'>@random_order</span> <span class='op'>?</span> <span class='id identifier rubyid_rand'>rand</span><span class='lparen'>(</span><span class='int'>25_000</span><span class='rparen'>)</span> <span class='op'>:</span> <span class='kw'>nil</span>
+
+  <span class='ivar'>@posts</span> <span class='op'>=</span> <span class='const'>PostModel</span><span class='period'>.</span><span class='id identifier rubyid_retrieve_posts'>retrieve_posts</span><span class='lparen'>(</span>
+    <span class='label'>offset:</span> <span class='ivar'>@offset</span><span class='comma'>,</span>
+    <span class='label'>limit:</span> <span class='ivar'>@limit</span><span class='comma'>,</span>
+    <span class='label'>order_by:</span> <span class='ivar'>@order_by</span><span class='comma'>,</span>
+    <span class='label'>random_order:</span> <span class='ivar'>@random_order</span><span class='comma'>,</span>
+    <span class='label'>search_query:</span> <span class='ivar'>@search_query</span><span class='comma'>,</span>
+    <span class='label'>seed:</span> <span class='ivar'>@seed</span>
+  <span class='rparen'>)</span>
+
+  <span class='id identifier rubyid_erb'>erb</span> <span class='symbol'>:&quot;posts/posts&quot;</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+  </div>
+
+</div>
+
+      <div id="footer">
+  Generated on Mon Mar 17 00:02:43 2025 by
+  <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
+  0.9.37 (ruby-3.3.2).
+</div>
+
+    </div>
+  </body>
+</html>

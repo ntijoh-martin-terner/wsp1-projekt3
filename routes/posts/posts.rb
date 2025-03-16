@@ -11,15 +11,34 @@ def daily_seed
   Digest::SHA256.hexdigest(current_date).to_i(16) % (2**31 - 1)
 end
 
+#
+# Posts routes
+#
 class Posts < App
   before do
     redirect '/404' if session[:user_id].nil?
   end
 
+  #
+  # GET /home
+  #
+  # Redirects to a random post listing.
+  # @example
+  #   GET /posts/home
   get '/home' do
     redirect '/posts/random'
   end
 
+  #
+  # GET /:sorting
+  #
+  # Retrieves posts sorted by different criteria.
+  #
+  # @param sorting [String] The sorting type (new, hot, controversial, or random).
+  # @param search [String, nil] An optional search query.
+  # @example
+  #   GET /posts/new?search=example
+  #
   get %r{/(new|hot|controversial|random)} do |sorting|
     @path_info = request.fullpath
     @user_id = session[:user_id].to_i
@@ -57,56 +76,18 @@ class Posts < App
     erb :"posts/posts"
   end
 
-  # get '/new' do
-  #   @path_info = request.fullpath
-  #   @limit = 10
-  #   @offset = 0
-  #   @posts = PostModel.retrieve_posts(offset: @offset, limit: @limit, random_order: false,
-  #                                     order_by: 'recent')
-
-  #   erb :"posts/posts"
-  # end
-
-  # get '/hot' do
-  #   @path_info = request.fullpath
-  #   @limit = 10
-  #   @offset = 0
-  #   @posts = PostModel.retrieve_posts(offset: @offset, limit: @limit, random_order: false,
-  #                                     order_by: 'upvotes')
-
-  #   erb :"posts/posts"
-  # end
-
-  # get '/rising' do
-  #   @path_info = request.fullpath
-  #   @limit = 10
-  #   @offset = 0
-  #   @posts = PostModel.retrieve_posts(offset: @offset, limit: @limit, random_order: false,
-  #                                     order_by: 'votes')
-
-  #   erb :"posts/posts"
-  # end
-
-  # get '/random' do
-  #   @path_info = request.fullpath
-  #   seed = rand(25_000)
-
-  #   @posts = PostModel.retrieve_posts(seed: seed, offset: @offset, limit: @limit, random_order: true)
-
-  #   erb :"posts/posts"
-  # end
-
-  # get '/test' do
-  #   # @path_info = request.fullpath
-  #   @limit = 10
-  #   @offset = 0
-  #   @channel_ids = []
-  #   @posts = PostModel.retrieve_posts(seed: daily_seed, offset: @offset, limit: @limit, random_order: true)
-  #   @user_id = session[:user_id]
-
-  #   erb :"posts/posts"
-  # end
-
+  #
+  # GET /
+  #
+  # Retrieves a list of posts based on sorting and search criteria.
+  # Redirects to /posts/random if no parameters are provided.
+  #
+  # @param order_by [String, nil] Sorting order for posts.
+  # @param search [String, nil] Search query.
+  # @param random_order [Boolean] Whether to randomize results.
+  # @example
+  #   GET /posts/?order_by=upvotes DESC&search=example
+  #
   get '/' do
     redirect '/posts/random' if params.nil?
 

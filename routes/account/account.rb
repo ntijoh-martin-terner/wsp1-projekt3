@@ -93,19 +93,50 @@ class Account < App
     erb :"account/user/posts"
   end
 
+  #
+  # GET /login
+  #
+  # Renders the login page for the account.
+  #
+  # @return [String] The rendered ERB template for the account login page.
+  # @example
+  #   GET /login
   get '/login' do
     erb :"account/login"
   end
 
+  #
+  # GET /signup
+  #
+  # @return [String] the rendered ERB template for the account signup page
+  # @example
+  #   GET /signup
   get '/signup' do
     erb :"account/signup"
   end
 
+  #
+  # POST /logout
+  #
+  # Renders the signup page for creating a new account.
+  #
+  # @example
+  #   POST /logout
   post '/logout' do
     session[:user_id] = nil
     redirect back
   end
 
+  #
+  # POST /logout
+  #
+  # Authenticates a user based on provided credentials.
+  #
+  # @example
+  #   POST /login
+  #   Parameters:
+  #     - username: The user's username.
+  #     - password: The user's password.
   post '/login' do
     username = params['username']
     password = params['password']

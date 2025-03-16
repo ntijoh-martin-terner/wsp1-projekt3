@@ -7,6 +7,9 @@ require File.join(DATABASE_PATH, '/models/channel/permission.rb')
 require File.join(DATABASE_PATH, '/models/channel/channel_role.rb')
 require File.join(DATABASE_PATH, '/models/channel/channel_membership.rb')
 
+#
+# Channel routes
+#
 class Channel < App
   helpers do
     def current_user
@@ -33,35 +36,29 @@ class Channel < App
     end
   end
 
+  #
+  # GET /:channel_id
+  #
+  # Redirects to a random post in the specified channel.
+  #
+  # @param channel_id [String] the ID of the channel (as a path variable)
+  # @example
+  #   GET /channel/123
+  #
   get '/:channel_id' do |channel_id|
     redirect "/channel/#{channel_id}/random"
-    # channel = ChannelModel.get_channel_from_id(channel_id)
-    # # Handle sorting
-
-    # @order_by = case params[:sort]
-    #             when 'recent' then 'post.created_at DESC'
-    #             when 'old' then 'post.created_at ASC'
-    #             when 'upvotes' then 'upvotes DESC'
-    #             when 'votes' then 'votes DESC'
-    #             when 'downvotes' then 'downvotes DESC'
-    #             else 'post.created_at DESC'
-    #             end
-
-    # # Handle search
-    # @search_query = params[:search] || nil
-
-    # @channel_id = channel_id
-    # @name = channel['name']
-    # @description = channel['description']
-    # @created_at = channel['created_at']
-    # @limit = 20
-    # @offset = 0
-    # @channel_ids = [channel_id.to_i]
-    # @posts = PostModel.retrieve_posts(offset: @offset, limit: @limit, channel_ids: [channel_id.to_i],
-    #                                   search_query: @search_query, order_by: @order_by)
-    # erb :'posts/channel'
   end
 
+  #
+  # GET /:channel_id/:sorting
+  #
+  # Displays posts in the specified channel, sorted by the given criteria.
+  #
+  # @param channel_id [String] the ID of the channel (as a path variable)
+  # @param sorting [String] the sorting criteria ('new', 'hot', 'controversial', or 'random')
+  # @example
+  #   GET /channel/123/new
+  #
   get %r{/([^/]+)/(new|hot|controversial|random)} do |channel_id, sorting|
     channel = ChannelModel.get_channel_from_id(channel_id)
 
@@ -70,20 +67,11 @@ class Channel < App
     @limit = 10
     @offset = 0
 
-    @order_by = case sorting
+    @order_by = case sorting # rubocop:disable Style/HashLikeCase
                 when 'new' then 'post.created_at DESC'
                 when 'hot' then 'post.created_at ASC'
                 when 'controversial' then 'downvotes DESC'
                 end
-
-    # @order_by = case params[:sort]
-    #             when 'recent' then 'post.created_at DESC'
-    #             when 'old' then 'post.created_at ASC'
-    #             when 'upvotes' then 'upvotes DESC'
-    #             when 'votes' then 'votes DESC'
-    #             when 'downvotes' then 'downvotes DESC'
-    #             else @order_by
-    #             end
 
     @random_order = true if sorting == 'random'
 
@@ -112,6 +100,15 @@ class Channel < App
     erb :"posts/channel"
   end
 
+  #
+  # GET /:channel_id/adminpage
+  #
+  # Displays the admin page for the specified channel.
+  #
+  # @param channel_id [String] the ID of the channel (as a path variable)
+  # @example
+  #   GET /channel/123/adminpage
+  #
   get '/:channel_id/adminpage' do |channel_id|
     user_id = session[:user_id]
     halt 403, 'Not authorized' unless user_id # Ensure user is logged in
@@ -124,17 +121,9 @@ class Channel < App
     # Fetch permissions for the user in this channel
     permissions = ChannelMembershipModel.permissions_for(user_id: user_id, channel_id: channel_id)
 
-    p permissions # currently only channelRoleModel name but needs to be PermissionModel name
-    p 'permissions ^'
-
     @roles = ChannelRoleModel.get_all_editable_roles(channel_id: channel_id)
 
     @users_with_roles = ChannelRoleModel.users_with_editable_roles(channel_id: channel_id)
-
-    p @users_with_roles
-
-    p @roles
-    p '^^^roles ^^ ^'
 
     @permissions = PermissionModel.get_all_removeable_permissions
 
@@ -150,6 +139,14 @@ class Channel < App
     erb :"channel/adminpage"
   end
 
+  #
+  # POST /new
+  #
+  # Creates a new channel with the provided title and description.
+  #
+  # @example
+  #   POST /channel/new
+  #
   post '/new' do
     title = params[:title]
     description = params[:description]
@@ -189,6 +186,15 @@ class Channel < App
     redirect "/channel/#{channel_id}"
   end
 
+  #
+  # POST /:channel_id/update_role_permissions
+  #
+  # Updates the permissions for a specific role within the specified channel.
+  #
+  # @param channel_id [String] the ID of the channel (as a path variable)
+  # @example
+  #   POST /channel/123/update_role_permissions
+  #
   post '/:channel_id/update_role_permissions' do |channel_id|
     halt 403 unless user_has_permission?(%w[owner adminpage], channel_id)
 
@@ -213,7 +219,15 @@ class Channel < App
     redirect back
   end
 
-  # add a user's role
+  #
+  # POST /:channel_id/add_user_role
+  #
+  # Adds a role to a user within the specified channel.
+  #
+  # @param channel_id [String] the ID of the channel (as a path variable)
+  # @example
+  #   POST /channel/123/add_user_role
+  #
   post '/:channel_id/add_user_role' do |channel_id|
     halt 403 unless user_has_permission?(%w[owner adminpage], channel_id)
 
@@ -227,7 +241,15 @@ class Channel < App
     redirect back
   end
 
-  # remove a user's role
+  #
+  # POST /:channel_id/remove_user_role
+  #
+  # Removes a role from a user within the specified channel.
+  #
+  # @param channel_id [String] the ID of the channel (as a path variable)
+  # @example
+  #   POST /channel/123/remove_user_role
+  #
   post '/:channel_id/remove_user_role' do |channel_id|
     halt 403 unless user_has_permission?(%w[owner adminpage], channel_id)
 
@@ -241,7 +263,15 @@ class Channel < App
     redirect back
   end
 
-  # Change a user's role
+  #
+  # POST /:channel_id/create_role
+  #
+  # Creates a role within the specified channel.
+  #
+  # @param channel_id [String] the ID of the channel (as a path variable)
+  # @example
+  #   POST /channel/123/create_role
+  #
   post '/:channel_id/create_role' do |channel_id|
     halt 403 unless user_has_permission?(%w[owner adminpage], channel_id)
 
@@ -249,10 +279,6 @@ class Channel < App
 
     ChannelRoleModel.insert(channel_id: channel_id, name: role_name, editable: 1)
 
-    # user = UserModel.find_by_username(username: username)
-    # halt 404, 'User not found' unless user
-
-    # ChannelMembershipModel.update_role(user_id: user.id, channel_id: channel_id, new_role_id: new_role_id)
     redirect back
   end
 end

@@ -8,11 +8,22 @@ require File.join(DATABASE_PATH, '/models/media.rb')
 require File.join(DATABASE_PATH, '/models/channel/channel_membership.rb')
 require 'digest'
 
+#
+# Post routes
+#
 class Post < App
   before do
     redirect '/404' if session[:user_id].nil?
   end
 
+  #
+  # GET /:post_id
+  #
+  # Retrieves a post by its ID and its associated comments.
+  #
+  # @param post_id [String] The ID of the post.
+  # @example
+  #   GET /post/123
   get '/:post_id' do |post_id|
     @post = PostModel.get_post_from_id(post_id)
     @offset = params[:offset]&.to_i || 0
@@ -27,6 +38,14 @@ class Post < App
     erb :"posts/post"
   end
 
+  #
+  # POST /:post_id/delete
+  #
+  # Deletes a post if the user has permission.
+  #
+  # @param post_id [String] The ID of the post.
+  # @example
+  #   POST /post/123/delete
   post '/:post_id/delete' do |post_id|
     user_id = session[:user_id]
     halt 403, 'Unauthorized' unless user_id
@@ -44,6 +63,13 @@ class Post < App
     redirect back
   end
 
+  #
+  # POST /new
+  #
+  # Creates a new post.
+  #
+  # @example
+  #   POST /post/new
   post '/new' do
     user_id = session[:user_id]
     halt 403, 'Unauthorized' unless user_id
@@ -77,6 +103,14 @@ class Post < App
     redirect "/post/#{post_id}"
   end
 
+  #
+  # POST /:post_id/comment
+  #
+  # Adds a comment to a post.
+  #
+  # @param post_id [String] The ID of the post.
+  # @example
+  #   POST /post/123/comment
   post '/:post_id/comment' do |post_id|
     parent_id = params[:parent_id].empty? ? nil : params[:parent_id]
     content = params[:content]
@@ -93,29 +127,73 @@ class Post < App
     redirect back
   end
 
+  #
+  # POST /:post_id/upvote
+  #
+  # Upvotes a post.
+  #
+  # @param post_id [String] The ID of the post.
+  # @example
+  #   POST /post/123/upvote
   post '/:post_id/upvote' do |post_id|
     user_id = session[:user_id]
     @user_vote = VoteModel.cast_vote(post_id: post_id, vote_type: 1, user_id: user_id)
     content_type :json
     redirect back
   end
+
+  #
+  # POST /:post_id/downvote
+  #
+  # Downvotes a post.
+  #
+  # @param post_id [String] The ID of the post.
+  # @example
+  #   POST /post/123/downvote
   post '/:post_id/downvote' do |post_id|
     user_id = session[:user_id]
     @user_vote = VoteModel.cast_vote(post_id: post_id, vote_type: -1, user_id: user_id)
     redirect back
   end
 
+  #
+  # POST /comments/:comment_id/upvote
+  #
+  # Upvotes a comment.
+  #
+  # @param comment_id [String] The ID of the comment.
+  # @example
+  #   POST /post/comments/456/upvote
   post '/comments/:comment_id/downvote' do |comment_id|
     user_id = session[:user_id]
     @user_vote = VoteModel.cast_vote(comment_id: comment_id, vote_type: -1, user_id: user_id)
     redirect back
   end
+
+  #
+  # POST /comments/:comment_id/downvote
+  #
+  # Downvotes a comment.
+  #
+  # @param comment_id [String] The ID of the comment.
+  # @example
+  #   POST /post/comments/456/downvote
   post '/comments/:comment_id/upvote' do |comment_id|
     user_id = session[:user_id]
     @user_vote = VoteModel.cast_vote(comment_id: comment_id, vote_type: 1, user_id: user_id)
     redirect back
   end
 
+  #
+  # GET /:post_id/comments/?:comment_id?
+  #
+  # Retrieves comments for a post, optionally filtering by parent comment ID.
+  #
+  # @param post_id [String] The ID of the post.
+  # @param comment_id [String, nil] The ID of the parent comment (optional).
+  # @example
+  #   GET /post/123/comments
+  #   GET /post/123/comments/456
   get '/:post_id/comments/?:comment_id?' do |post_id, comment_id|
     @post = PostModel.get_post_from_id(post_id)
 
